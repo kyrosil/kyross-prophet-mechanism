@@ -1,4 +1,4 @@
-// Kyros's Prophet Mechanism - Main Script (Corrected for 12 Letters - Final Attempt)
+// Kyros's Prophet Mechanism - Final Corrected Script (April 6, 2025)
 
 // --- Global Variables ---
 let currentLevel = 1;
@@ -87,46 +87,45 @@ function displayLevel(levelNumber) {
                 </div>
                 <div id="indicator"></div>
                 <p>Level 1: Discover the primary functions.</p>
-            `; // Reset butonu Seviye 1'de yok
+            `;
             attachLevel1Listeners();
             updateIndicator('');
 
         } else if (levelNumber === 2) {
             console.log("Setting up Level 2 HTML and listeners...");
-            level2Attempts = loadLevel2Attempts(); // Load attempts again here to be safe
-            const targetWord = "REVROSYKCESI"; // Correct 12-letter target
-            const sourceWordInfo = "KYROSERVICES (12 letters: K,Y,R(2),O,S(2),E(2),V,I,C)"; // Updated info
-            const availableLettersDisplay = "C, E(2), I, K, O, R(2), S(2), V, Y"; // Reminder letters
+            level2Attempts = loadLevel2Attempts();
+            const targetWord = "REVROSYKCESI";
+            const sourceWordInfo = "KYROSERVICES (12 letters: K,Y,R(2),O,S(2),E(2),V,I,C)";
+            const availableLettersDisplay = "C, E(2), I, K, O, R(2), S(2), V, Y";
 
-            const initialFeedback = '_ '.repeat(targetWord.length).trim(); // Uses 12 correctly
+            const initialFeedback = '_ '.repeat(targetWord.length).trim();
 
             mechanismDiv.innerHTML = `
                 <h2>Level 2: Find the Target Word</h2>
                 <p class="level2-instructions">Use the letters from ${sourceWordInfo} to form the target 12-letter word.</p>
                 <div class="available-letters">Available letters: ${availableLettersDisplay}</div>
                 <div id="level2-feedback">${initialFeedback}</div>
-                <input type="text" id="level2-input" maxlength="12" placeholder="Enter your 12-letter guess..." autocomplete="off" autocapitalize="characters" style="text-transform:uppercase"> <button id="level2-submit">Submit Guess</button>
+                <input type="text" id="level2-input" maxlength="12" placeholder="Enter your 12-letter guess..." autocomplete="off" autocapitalize="characters" style="text-transform:uppercase">
+                <button id="level2-submit">Submit Guess</button>
                 <p id="level2-message">
                     Attempts remaining: <span id="level2-attempts">${level2Attempts}</span>
                 </p>
-                ${resetButtonHTML} `;
-            attachLevel2Listeners(targetWord); // Pass 12-letter target
+                ${resetButtonHTML}
+            `;
+            attachLevel2Listeners(targetWord);
 
-            // Disable inputs if already failed on load
             if (level2Attempts <= 0) {
                 const inputEl = document.getElementById('level2-input');
                 const submitBtn = document.getElementById('level2-submit');
                 const messageEl = document.getElementById('level2-message');
                 const feedbackEl = document.getElementById('level2-feedback');
-
                 if(inputEl) inputEl.disabled = true;
                 if(submitBtn) submitBtn.disabled = true;
                 if(messageEl) messageEl.textContent += " No attempts remaining.";
-                if(feedbackEl) feedbackEl.textContent = '_ '.repeat(targetWord.length).trim(); // Uses 12 correctly
+                if(feedbackEl) feedbackEl.textContent = '_ '.repeat(targetWord.length).trim();
             }
 
         } else {
-             // Placeholder for Level 3 and beyond
              console.log(`Displaying placeholder for Level ${levelNumber}.`);
              mechanismDiv.innerHTML = `<p>Level ${levelNumber} - Coming Soon!</p>${resetButtonHTML}`;
         }
@@ -138,7 +137,6 @@ function displayLevel(levelNumber) {
 
 // --- Level 1 Specific Functions ---
 function attachLevel1Listeners() {
-    // Use setTimeout to ensure DOM is updated after innerHTML
     setTimeout(() => {
         const triangleBtn = document.getElementById('symbol-triangle');
         const squareBtn = document.getElementById('symbol-square');
@@ -191,7 +189,7 @@ function updateIndicator(color) {
 }
 
 // --- Level 2 Specific Functions ---
-function attachLevel2Listeners(target) { // Target is 12 letters
+function attachLevel2Listeners(target) {
     try {
         const inputEl = document.getElementById('level2-input');
         const submitBtn = document.getElementById('level2-submit');
@@ -204,7 +202,7 @@ function attachLevel2Listeners(target) { // Target is 12 letters
     } catch(error) { console.error("Error attaching L2 listeners", error); }
 }
 
-function handleLevel2Submit(target) { // Target is 12 letters
+function handleLevel2Submit(target) {
     try {
         const inputEl = document.getElementById('level2-input');
         const feedbackEl = document.getElementById('level2-feedback');
@@ -216,24 +214,25 @@ function handleLevel2Submit(target) { // Target is 12 letters
 
         let guess = inputEl.value.toUpperCase().trim();
         // Clear message only if it's not the 'no attempts' message
-        if (level2Attempts > 0) messageEl.textContent = '';
+         const currentMessage = messageEl.textContent || "";
+         if (!currentMessage.includes("No attempts remaining")) {
+              messageEl.textContent = '';
+         }
 
 
-        // ***** UZUNLUK KONTROLÜ (12 HARF) *****
-        if (guess.length !== target.length) { // target.length is now 12
-            messageEl.textContent = `Guess must be ${target.length} letters long.`; // Correctly says 12
-            inputEl.focus();
-            return; // No attempt used
+        if (guess.length !== target.length) {
+            messageEl.textContent = `Guess must be ${target.length} letters long.`;
+            // inputEl.focus(); // Removed this as potential cause of issue
+            return;
         }
 
-        // Use an attempt
         level2Attempts--;
-        saveLevel2Attempts(level2Attempts); // Save remaining attempts
+        saveLevel2Attempts(level2Attempts);
         if(attemptsEl) attemptsEl.textContent = level2Attempts;
 
         let feedback = '';
         let correct = true;
-        for (let i = 0; i < target.length; i++) { // Iterates 12 times
+        for (let i = 0; i < target.length; i++) {
             if (guess[i] === target[i]) {
                 feedback += target[i] + ' ';
             } else {
@@ -247,7 +246,7 @@ function handleLevel2Submit(target) { // Target is 12 letters
             messageEl.textContent = "Correct!";
             inputEl.disabled = true;
             submitBtn.disabled = true;
-            setTimeout(() => goToLevel(3), 1000); // Win!
+            setTimeout(() => goToLevel(3), 1000);
             return;
         }
 
@@ -255,13 +254,13 @@ function handleLevel2Submit(target) { // Target is 12 letters
             messageEl.textContent = "Incorrect. No attempts remaining!";
             inputEl.disabled = true;
             submitBtn.disabled = true;
-            if(feedbackEl) feedbackEl.textContent = '_ '.repeat(target.length).trim(); // Reset feedback on final fail
+            if(feedbackEl) feedbackEl.textContent = '_ '.repeat(target.length).trim();
             return;
         }
 
         messageEl.textContent = "Incorrect, try again.";
         inputEl.value = '';
-        inputEl.focus();
+        // inputEl.focus(); // Removed this as potential cause of issue
 
     } catch(error) {
         console.error("Error during handleLevel2Submit:", error);
@@ -272,9 +271,8 @@ function handleLevel2Submit(target) { // Target is 12 letters
 // --- Navigation & Reset ---
 function goToLevel(levelNumber) {
     const passedLevel = levelNumber - 1;
-    // Using console.log instead of alert for smoother transition
-    console.log(`Congratulations! Level ${passedLevel} Passed! Moving to Level ${levelNumber}...`);
-    // alert(`Congratulations! Level ${passedLevel} Passed!\nMoving to Level ${levelNumber}...`);
+    // Restore alert for level pass notification
+    alert(`Congratulations! Level ${passedLevel} Passed!\nMoving to Level ${levelNumber}...`);
     currentLevel = levelNumber;
     saveGame(currentLevel);
     displayLevel(currentLevel);
@@ -283,14 +281,13 @@ function goToLevel(levelNumber) {
 function resetToLevel1() {
     console.warn("Resetting progress to Level 1!");
     try {
-        // Bypassing confirm for simplicity now
+        // Bypassing confirm for now, can be added back
         localStorage.removeItem(LEVEL_STORAGE_KEY);
         localStorage.removeItem(L2_ATTEMPTS_STORAGE_KEY);
-        // alert("Progress reset. Reloading page...");
         window.location.reload();
     } catch(e) {
         console.error("Error resetting progress:", e);
-        alert("Error resetting progress: " + e.message); // Keep alert for reset error
+        alert("Error resetting progress: " + e.message);
     }
 }
 
