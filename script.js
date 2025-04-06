@@ -100,7 +100,7 @@ function displayLevel(levelNumber) {
             let questionText = "";
             if (level2QuestionNumber === 1) { questionText = "Q1: Who is the main sponsor of Kyrosil?"; }
             else if (level2QuestionNumber === 2) { questionText = "Q2: Who is the latest sponsor of Kyrosil?"; }
-            else if (level2QuestionNumber === 3) { questionText = "Q3: What airline alliance do these two sponsors (Swiss Air & THY) belong to?"; }
+            else if (level2QuestionNumber === 3) { questionText = "Q3: What airline alliance do these two sponsors (Swiss Air & Turkish Airlines) belong to?"; }
             else { questionText = "Error: Invalid question state."; level2QuestionNumber = 1; saveLevel2QuestionNumber(1); }
 
             mechanismDiv.innerHTML = `
