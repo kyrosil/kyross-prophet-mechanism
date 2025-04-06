@@ -1,4 +1,4 @@
-// Kyros's Prophet Mechanism - Final Script (Applying L2 Button Enable Fix)
+// Kyros's Prophet Mechanism - Final Script (Reverted L2 Submit change, aiming for stability)
 
 // --- Global Variables ---
 let currentLevel = 1;
@@ -97,23 +97,75 @@ function displayLevel(levelNumber) {
             `;
             attachLevel2Listeners(targetWord);
 
-            if (level2Attempts <= 0) { /* ... Kilitleme kodu ... */ }
+            if (level2Attempts <= 0) {
+                const inputEl = document.getElementById('level2-input');
+                const submitBtn = document.getElementById('level2-submit');
+                const messageEl = document.getElementById('level2-message');
+                const feedbackEl = document.getElementById('level2-feedback');
+                if(inputEl) inputEl.disabled = true;
+                if(submitBtn) submitBtn.disabled = true;
+                if(messageEl && !messageEl.textContent.includes("No attempts remaining")) { messageEl.textContent += " No attempts remaining."; }
+                if(feedbackEl) feedbackEl.textContent = '_ '.repeat(targetWord.length).trim();
+            }
 
         } else {
              console.log(`Displaying placeholder for Level ${levelNumber}.`);
              mechanismDiv.innerHTML = `<p>Level ${levelNumber} - Coming Soon!</p>${resetButtonHTML}`;
         }
-    } catch(error) { console.error("Error during displayLevel:", error); mechanismDiv.innerHTML = `<p style="color:red;">Error loading level! Try resetting.</p>${resetButtonHTML}`; }
+    } catch(error) { console.error("Error during displayLevel:", error); if(mechanismDiv) mechanismDiv.innerHTML = `<p style="color:red;">Error loading level! Try resetting.</p>${resetButtonHTML}`; }
 }
 
 // --- Level 1 Specific Functions ---
-function attachLevel1Listeners() { /* ... Önceki çalışan kod ... */ }
-function handleSymbolClick(symbol) { /* ... Önceki çalışan kod ... */ }
-function updateIndicator(color) { /* ... Önceki çalışan kod ... */ }
+function attachLevel1Listeners() {
+    setTimeout(() => {
+        try {
+            const triangleBtn = document.getElementById('symbol-triangle');
+            const squareBtn = document.getElementById('symbol-square');
+            const circleBtn = document.getElementById('symbol-circle');
+            if (!triangleBtn || !squareBtn || !circleBtn) { console.error("Could not find L1 buttons!"); return; }
+            console.log("Attaching L1 listeners...");
+            triangleBtn.addEventListener('click', () => handleSymbolClick('triangle'));
+            squareBtn.addEventListener('click', () => handleSymbolClick('square'));
+            circleBtn.addEventListener('click', () => handleSymbolClick('circle'));
+        } catch (error) { console.error("Error attaching L1 listeners:", error); }
+    }, 0);
+}
+
+function handleSymbolClick(symbol) {
+    if (currentLevel !== 1) return;
+    console.log(`${symbol} clicked in Level 1`);
+    try {
+        let colorToSet = '';
+        if (symbol === 'triangle') {
+            colorToSet = 'red'; lastSymbolClicked = 'triangle'; updateIndicator(colorToSet);
+        } else if (symbol === 'square') {
+            if (lastSymbolClicked === 'triangle') {
+                colorToSet = 'green'; lastSymbolClicked = null; updateIndicator(colorToSet);
+            } else {
+                colorToSet = 'blue'; updateIndicator(colorToSet); // Update color FIRST
+                if (!level1Passed) {
+                    level1Passed = true; console.log("Level 1 Pass Condition Met (BLUE)!");
+                    setTimeout(() => goToLevel(2), 500); // Go to next level
+                    return; // Return after triggering
+                }
+                lastSymbolClicked = null;
+            }
+        } else if (symbol === 'circle') {
+            colorToSet = ''; lastSymbolClicked = null; updateIndicator(colorToSet);
+        }
+    } catch (error) { console.error("Error in handleSymbolClick:", error); }
+}
+
+function updateIndicator(color) {
+    try {
+        const indicatorEl = document.getElementById('indicator');
+        if (indicatorEl) { indicatorEl.style.backgroundColor = color || '#ddd'; console.log(`Indicator color set to: ${color || 'default(#ddd)'}`); }
+    } catch (error) { console.error("Error updating indicator:", error); }
+}
 
 // --- Level 2 Specific Functions ---
 function attachLevel2Listeners(target) {
-    setTimeout(() => { // Keep setTimeout fix
+    setTimeout(() => { // Keep setTimeout fix here too
         try {
             const inputEl = document.getElementById('level2-input');
             const submitBtn = document.getElementById('level2-submit');
@@ -136,76 +188,51 @@ function handleLevel2Submit(target) {
 
         if (!inputEl || !feedbackEl || !messageEl || !attemptsEl || !submitBtn || (level2Attempts <= 0 && !submitBtn.disabled)) {
              console.error("L2 Submit Error: Elements missing or no attempts left.");
-             if(messageEl && level2Attempts <=0) messageEl.textContent = "No attempts remaining."; // Ensure message is correct
+             if(messageEl && level2Attempts <=0) messageEl.textContent = "No attempts remaining.";
              return;
         }
 
         let guess = inputEl.value.toUpperCase().trim();
         const currentMessage = messageEl.textContent || "";
-         if (!currentMessage.includes("No attempts remaining")) { messageEl.textContent = ''; }
-
+        if (!currentMessage.includes("No attempts remaining")) { messageEl.textContent = ''; }
 
         if (guess.length !== target.length) {
-            messageEl.textContent = `Guess must be ${target.length} letters long.`;
-            return;
+            messageEl.textContent = `Guess must be ${target.length} letters long.`; return;
         }
 
         level2Attempts--;
         saveLevel2Attempts(level2Attempts);
         attemptsEl.textContent = level2Attempts;
 
-
-        let feedback = '';
-        let correct = true;
+        let feedback = ''; let correct = true;
         for (let i = 0; i < target.length; i++) {
-            if (guess[i] === target[i]) { feedback += target[i] + ' '; }
-            else { feedback += '_ '; correct = false; }
+            if (guess[i] === target[i]) { feedback += target[i] + ' '; } else { feedback += '_ '; correct = false; }
         }
         feedbackEl.textContent = feedback.trim();
 
-
         if (correct) {
-            console.log("Level 2 Correct!");
-            messageEl.textContent = "Correct!";
-            inputEl.disabled = true;
-            submitBtn.disabled = true;
-            setTimeout(() => goToLevel(3), 1000);
-            return;
+            messageEl.textContent = "Correct!"; inputEl.disabled = true; submitBtn.disabled = true;
+            setTimeout(() => goToLevel(3), 1000); return;
         }
-
         if (level2Attempts <= 0) {
-            console.log("Level 2 Failed - No attempts left.");
-            messageEl.textContent = "Incorrect. No attempts remaining!";
-            inputEl.disabled = true;
-            submitBtn.disabled = true;
-            feedbackEl.textContent = '_ '.repeat(target.length).trim();
-            return;
+            messageEl.textContent = "Incorrect. No attempts remaining!"; inputEl.disabled = true; submitBtn.disabled = true;
+            feedbackEl.textContent = '_ '.repeat(target.length).trim(); return;
         }
 
-        // Yanlış ama hak varsa:
-        console.log("Incorrect guess, attempts remaining.");
         messageEl.textContent = "Incorrect, try again.";
-        inputEl.value = ''; // Girdiyi temizle
-        // ***** EKSİK KONTROL / DÜZELTME *****
-        // Butonun ve inputun tekrar enable olduğundan emin olalım (eğer daha önce disable edilmediyse zaten öyledir ama garanti olsun)
+        inputEl.value = '';
+        // Ensure button/input are enabled after incorrect guess
         inputEl.disabled = false;
         submitBtn.disabled = false;
-        // ***** DÜZELTME SONU *****
 
-
-    } catch(error) {
-        console.error("Error during handleLevel2Submit:", error);
-        if(messageEl) messageEl.textContent = "Error processing guess.";
-    }
+    } catch(error) { console.error("Error during handleLevel2Submit:", error); if(messageEl) messageEl.textContent = "Error processing guess."; }
     console.log("handleLevel2Submit finished.");
 }
-
 
 // --- Navigation & Reset ---
 function goToLevel(levelNumber) {
     const passedLevel = levelNumber - 1;
-    // Alert geri geldi
-    alert(`Congratulations! Level ${passedLevel} Passed!\nMoving to Level ${levelNumber}...`);
+    alert(`Congratulations! Level ${passedLevel} Passed!\nMoving to Level ${levelNumber}...`); // Alert restored
     currentLevel = levelNumber;
     saveGame(currentLevel);
     displayLevel(currentLevel);
