@@ -177,3 +177,18 @@ label[for="swiss-email"], label[for="thy-email"] { display: block; margin-bottom
     #get-code-button { font-size: 1em; padding: 12px 20px; }
     #discount-code-area { padding: 15px 20px; font-size: 0.95em; } #discount-code-area h3 { font-size: 1.15em; } #discount-code-area .code { font-size: 1.15em; }
 }
+/* ----- SEVİYE 1 İPUCU (TEKRAR EKLENDİ) ----- */
+
+#mechanism > p:first-of-type::after {
+    /* Seviye 1'deki ilk paragrafın sonrasına ekler (Genellikle açıklama) */
+    content: "\A\A İpucu: Sembollere tek tek veya farklı sıralarla basmayı deneyin.\A (Hint: Try pressing the symbols individually or in different sequences.)"; /* \A ile satır atlatıldı */
+    display: block; /* Yeni satırda göstermek için */
+    margin-top: 15px; /* Üstteki metinle arasına boşluk */
+    font-size: 0.9em;  /* Biraz daha küçük font */
+    color: #6c757d;    /* text-secondary rengiyle uyumlu */
+    font-style: italic; /* İtalik stil */
+    white-space: pre-wrap; /* Kod içindeki satır atlamalarını uygula */
+    line-height: 1.5; /* Satır yüksekliği */
+}
+
+/* ----- İPUCU SONU ----- */
