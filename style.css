@@ -1,1 +1,36 @@
+/* Genel sayfa stilleri */
+body {
+    font-family: sans-serif; /* Okunabilir bir yazı tipi */
+    background-color: #f0f0f0; /* Açık gri arka plan */
+    color: #333; /* Koyu gri yazı rengi */
+    margin: 0;
+    padding: 20px;
+    display: flex; /* İçeriği ortalamak için */
+    flex-direction: column; /* İçeriği dikey hizalamak için */
+    align-items: center; /* İçeriği yatayda ortalamak için */
+}
 
+/* Ana başlık stili */
+h1 {
+    color: #555; /* Biraz daha açık gri başlık */
+    text-align: center;
+}
+
+/* Mekanizma kutusunun stili */
+#mechanism {
+    background-color: #fff; /* Beyaz arka plan */
+    border: 3px solid #888; /* Belirgin gri kenarlık */
+    padding: 30px; /* İçeriden boşluk */
+    margin-top: 20px; /* Başlıkla arasında boşluk */
+    width: 80%; /* Sayfanın %80 genişliğinde */
+    max-width: 600px; /* Maksimum genişlik 600px */
+    min-height: 200px; /* Minimum yükseklik */
+    box-shadow: 0 4px 8px rgba(0,0,0,0.1); /* Hafif bir gölge */
+    text-align: center; /* İçindeki yazıyı ortala */
+}
+
+/* Mekanizma içindeki varsayılan paragraf (şimdilik) */
+#mechanism p {
+    color: #aaa; /* Soluk gri yazı */
+    font-style: italic;
+}
