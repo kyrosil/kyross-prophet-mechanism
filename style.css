@@ -1,145 +1,132 @@
 /* Genel sayfa stilleri */
 body {
-    font-family: sans-serif; /* Okunabilir bir yazı tipi */
-    background-color: #f0f0f0; /* Açık gri arka plan */
-    color: #333; /* Koyu gri yazı rengi */
+    font-family: sans-serif;
+    background-color: #f0f0f0;
+    color: #333;
     margin: 0;
     padding: 20px;
-    display: flex; /* İçeriği ortalamak için */
-    flex-direction: column; /* İçeriği dikey hizalamak için */
-    align-items: center; /* İçeriği yatayda ortalamak için */
-}
-
-/* Ana başlık stili */
-h1 {
-    color: #555; /* Biraz daha açık gri başlık */
-    text-align: center;
-}
-
-/* Mekanizma kutusunun stili */
-#mechanism {
-    background-color: #fff; /* Beyaz arka plan */
-    border: 3px solid #888; /* Belirgin gri kenarlık */
-    padding: 30px; /* İçeriden boşluk */
-    margin-top: 20px; /* Başlıkla arasında boşluk */
-    width: 80%; /* Sayfanın %80 genişliğinde */
-    max-width: 600px; /* Maksimum genişlik 600px */
-    min-height: 200px; /* Minimum yükseklik */
-    box-shadow: 0 4px 8px rgba(0,0,0,0.1); /* Hafif bir gölge */
-    text-align: center; /* İçindeki yazıyı ortala */
-}
-
-/* Mekanizma içindeki varsayılan paragraf (şimdilik) */
-#mechanism p {
-    color: #aaa; /* Soluk gri yazı */
-    font-style: italic;
-}
-/* ----- NEW STYLES START ----- */
-
-#mechanism-symbols {
-    margin-bottom: 20px; /* Sembollerle gösterge arası boşluk */
     display: flex;
-    justify-content: center; /* Sembolleri ortala */
-    gap: 15px; /* Semboller arası boşluk */
+    flex-direction: column;
+    align-items: center;
+    min-height: 100vh; /* Sayfanın en az ekran yüksekliğinde olmasını sağla */
+    box-sizing: border-box;
 }
 
-#mechanism-symbols button {
-    font-size: 2em; /* Sembolleri büyüt */
-    padding: 10px 20px;
-    cursor: pointer;
-    border: 2px solid #555;
-    background-color: #eee;
-    min-width: 60px; /* Düğme genişliği */
+/* Başlangıç Ekranı Stilleri */
+#start-screen {
+    display: flex; /* Başta görünür, flex layout */
+    flex-direction: column;
+    align-items: center;
     text-align: center;
+    padding: 30px;
+    background-color: #fff;
+    border-radius: 8px;
+    box-shadow: 0 4px 15px rgba(0,0,0,0.1);
+    max-width: 700px;
+    width: 90%;
 }
 
-#mechanism-symbols button:hover {
-    background-color: #ddd;
-}
-
-#indicator {
-    width: 100px;
-    height: 100px;
-    border: 2px solid #333;
-    background-color: #ddd; /* Başlangıçta nötr renk */
-    margin: 20px auto; /* Göstergeyi ortala */
-    transition: background-color 0.3s ease; /* Renk geçişini yumuşat */
-}
-
-#mechanism p { /* Alttaki açıklama yazısı için stil */
-    margin-top: 20px;
-    font-size: 0.9em;
-    color: #666;
-}
-
-/* ----- NEW STYLES END ----- */
-/* ----- NEW STYLES for Level 2 START ----- */
-
-.level2-instructions {
-    font-size: 1.1em;
-    margin-bottom: 15px;
+#start-screen h2 {
     color: #444;
-}
-
-.available-letters {
-    font-size: 0.9em;
-    color: #666;
     margin-bottom: 20px;
-    font-family: monospace; /* Harfleri daha net göstermek için */
-    letter-spacing: 1px;
 }
 
-#level2-feedback {
-    font-family: monospace; /* Harfleri hizalı göstermek için */
-    font-size: 1.8em;
-    letter-spacing: 4px; /* Harf/alt çizgi arası boşluk */
-    margin-bottom: 20px;
-    padding: 10px;
-    border: 1px dashed #ccc;
-    background-color: #f8f8f8;
-    min-height: 40px; /* İçerik olmasa bile yer kaplasın */
-    display: inline-block; /* İçeriğe göre genişlesin */
+#start-screen #main-logo {
+    max-width: 150px; /* Ana logo boyutu */
+    height: auto;
+    margin-bottom: 25px;
 }
 
-#level2-input {
-    font-size: 1.2em;
-    padding: 8px 10px;
-    margin-right: 10px;
-    width: 250px; /* Girdi kutusu genişliği */
-    text-transform: uppercase; /* Yazılanı otomatik büyük harf yap */
-}
-
-#level2-submit {
+#start-screen .intro-text {
+    margin-bottom: 25px;
+    line-height: 1.6;
     font-size: 1.1em;
-    padding: 9px 15px;
+}
+#start-screen .intro-text em {
+    display: block; /* İngilizceyi alta al */
+    font-size: 0.9em;
+    opacity: 0.8;
+    margin-top: 5px;
+}
+
+
+#start-screen .sponsor-logos {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    gap: 25px; /* Logolar arası boşluk */
+    margin-bottom: 30px;
+    flex-wrap: wrap; /* Küçük ekranlarda alta sarsın */
+}
+
+#start-screen .sponsor-logos img {
+    max-height: 40px; /* Sponsor logo yükseklikleri */
+    max-width: 100px; /* Sponsor logo genişlikleri */
+    height: auto;
+    width: auto;
+}
+
+#start-game-button {
+    padding: 12px 25px;
+    font-size: 1.2em;
     cursor: pointer;
+    background-color: #28a745; /* Yeşil renk */
+    color: white;
+    border: none;
+    border-radius: 5px;
+    transition: background-color 0.2s ease;
 }
 
-#level2-message {
-    margin-top: 15px;
-    min-height: 1.2em; /* Mesaj olmasa bile yer kaplasın */
-    font-weight: bold;
-    color: #d9534f; /* Hata/mesaj rengi (kırmızımsı) */
-}
-
-#level2-message:empty { /* Mesaj yokken boşluk bırakma */
-    min-height: 0;
-    margin-top: 0;
-    padding: 0;
-}
-
-#level2-message:not(:empty) { /* Mesaj varken görünsün */
-     padding: 5px;
+#start-game-button:hover {
+    background-color: #218838; /* Hover rengi */
 }
 
 
+/* Ana Oyun Alanı (Başta Gizli) */
+#main-title {
+    display: none; /* Başta gizli */
+    color: #555;
+    text-align: center;
+    margin-top: 20px; /* Başlangıç ekranı gidince görünsün */
+}
+
+#mechanism {
+    display: none; /* Başta gizli */
+    background-color: #fff;
+    border: 3px solid #888;
+    padding: 30px;
+    margin-top: 20px;
+    width: 90%; /* Genişlik */
+    max-width: 650px; /* Maks genişlik */
+    min-height: 250px;
+    box-shadow: 0 4px 8px rgba(0,0,0,0.1);
+    text-align: center;
+    box-sizing: border-box;
+}
+
+/* ---- Önceki Seviye 1 Stilleri ---- */
+#mechanism-symbols { margin-bottom: 20px; display: flex; justify-content: center; gap: 15px; }
+#mechanism-symbols button { font-size: 2em; padding: 10px 20px; cursor: pointer; border: 2px solid #555; background-color: #eee; min-width: 60px; text-align: center; transition: background-color 0.2s, transform 0.1s; }
+#mechanism-symbols button:hover { background-color: #ddd; }
+#mechanism-symbols button:active { transform: scale(0.95); } /* Tıklama efekti */
+#indicator { width: 100px; height: 100px; border: 2px solid #333; background-color: #ddd; margin: 20px auto; transition: background-color 0.3s ease; border-radius: 4px; }
+#mechanism > p { /* Seviye 1 açıklama */ margin-top: 20px; font-size: 0.9em; color: #666; }
+
+/* ---- Önceki Seviye 2 ve Ödül Stilleri ---- */
+#mechanism h2 { margin-top: 0; color: #444; }
+.level2-instructions, .reward-instructions { font-size: 1.1em; margin-bottom: 15px; color: #444; line-height: 1.5; }
+.available-letters { font-size: 0.9em; color: #666; margin-bottom: 20px; font-family: monospace; letter-spacing: 1px; }
+#level2-feedback { font-family: monospace; font-size: 1.8em; letter-spacing: 4px; margin-bottom: 20px; padding: 10px; border: 1px dashed #ccc; background-color: #f8f8f8; min-height: 40px; display: inline-block; }
+#level2-answer-input, #swiss-email, #thy-email { font-size: 1.1em; padding: 8px 10px; margin-bottom: 10px; width: 80%; max-width: 300px; border: 1px solid #ccc; border-radius: 4px; box-sizing: border-box; }
+#level2-answer-submit, #get-code-button { font-size: 1.1em; padding: 9px 15px; cursor: pointer; background-color: #007bff; color: white; border: none; border-radius: 4px; transition: background-color 0.2s; }
+#level2-answer-submit:hover, #get-code-button:hover { background-color: #0056b3; }
+#level2-message, #reward-message { margin-top: 15px; min-height: 1.2em; font-weight: bold; color: #d9534f; }
+#discount-code-area { margin-top: 20px; text-align: left; font-weight: bold; font-size: 1.1em; display: none; border: 1px solid green; padding: 15px; background-color: #e9f5e9; line-height: 1.6; border-radius: 4px; }
+#discount-code-area h3 { margin-top: 0; margin-bottom: 10px; color: #155724; }
+#discount-code-area p { margin: 5px 0; }
+#discount-code-area hr { margin: 15px 0; border: none; border-top: 1px dashed #ccc; }
+#discount-code-area strong { font-size: 1.1em; }
+label[for="swiss-email"], label[for="thy-email"] { display: block; margin-bottom: 3px; text-align: left; font-weight: bold; color: #555; }
 /* Disabled state styles */
-#level2-input:disabled,
-#level2-submit:disabled {
-    background-color: #eee;
-    cursor: not-allowed;
-    opacity: 0.6;
-}
-
-
-/* ----- NEW STYLES for Level 2 END ----- */
+#level2-answer-input:disabled, #level2-answer-submit:disabled,
+#swiss-email:disabled, #thy-email:disabled, #get-code-button:disabled { background-color: #eee; cursor: not-allowed; opacity: 0.7; }
