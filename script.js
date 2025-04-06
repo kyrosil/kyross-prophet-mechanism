@@ -1,4 +1,4 @@
-// Kyros's Prophet Mechanism - Main Script (Corrected for 12 Letters)
+// Kyros's Prophet Mechanism - Main Script (Corrected for 12 Letters - Final Attempt)
 
 // --- Global Variables ---
 let currentLevel = 1;
@@ -30,7 +30,6 @@ function saveLevel2Attempts(attempts) {
         }
      } catch (e) { console.error("Could not save L2 attempts", e); }
 }
-
 
 function loadGame() {
     console.log("loadGame started...");
@@ -66,7 +65,6 @@ function loadLevel2Attempts() {
      }
 }
 
-
 function displayLevel(levelNumber) {
     console.log(`Displaying Level ${levelNumber}`);
     try {
@@ -83,23 +81,22 @@ function displayLevel(levelNumber) {
             console.log("Setting up Level 1 HTML and listeners...");
             mechanismDiv.innerHTML = `
                 <div id="mechanism-symbols">
-                    <button id="symbol-triangle">△</button>
-                    <button id="symbol-square">□</button>
-                    <button id="symbol-circle">○</button>
+                    <button id="symbol-triangle" title="Triangle">△</button>
+                    <button id="symbol-square" title="Square">□</button>
+                    <button id="symbol-circle" title="Circle">○</button>
                 </div>
                 <div id="indicator"></div>
                 <p>Level 1: Discover the primary functions.</p>
-                 ${resetButtonHTML} `;
+            `; // Reset butonu Seviye 1'de yok
             attachLevel1Listeners();
             updateIndicator('');
 
         } else if (levelNumber === 2) {
             console.log("Setting up Level 2 HTML and listeners...");
-            level2Attempts = loadLevel2Attempts();
+            level2Attempts = loadLevel2Attempts(); // Load attempts again here to be safe
             const targetWord = "REVROSYKCESI"; // Correct 12-letter target
-            const sourceWordInfo = "KYROSERVICES (K,Y,R(2),O,S(2),E(2),V,I,C)"; // 12 letters info
-            const availableLettersSorted = "CCEEIIKOORRSSSVY".split('').sort().join(', '); // Yanlış, doğru harfler: C, E(2), I, K, O, R(2), S(2), V, Y
-            const availableLettersDisplay = "C, E(2), I, K, O, R(2), S(2), V, Y"; // Doğrusu bu
+            const sourceWordInfo = "KYROSERVICES (12 letters: K,Y,R(2),O,S(2),E(2),V,I,C)"; // Updated info
+            const availableLettersDisplay = "C, E(2), I, K, O, R(2), S(2), V, Y"; // Reminder letters
 
             const initialFeedback = '_ '.repeat(targetWord.length).trim(); // Uses 12 correctly
 
@@ -115,6 +112,7 @@ function displayLevel(levelNumber) {
                 ${resetButtonHTML} `;
             attachLevel2Listeners(targetWord); // Pass 12-letter target
 
+            // Disable inputs if already failed on load
             if (level2Attempts <= 0) {
                 const inputEl = document.getElementById('level2-input');
                 const submitBtn = document.getElementById('level2-submit');
@@ -139,9 +137,58 @@ function displayLevel(levelNumber) {
 }
 
 // --- Level 1 Specific Functions ---
-function attachLevel1Listeners() { /* ... önceki kod ... */ }
-function handleSymbolClick(symbol) { /* ... önceki kod ... */ }
-function updateIndicator(color) { /* ... önceki kod ... */ }
+function attachLevel1Listeners() {
+    // Use setTimeout to ensure DOM is updated after innerHTML
+    setTimeout(() => {
+        const triangleBtn = document.getElementById('symbol-triangle');
+        const squareBtn = document.getElementById('symbol-square');
+        const circleBtn = document.getElementById('symbol-circle');
+        if (!triangleBtn || !squareBtn || !circleBtn) { console.error("Could not find Level 1 buttons INSIDE setTimeout!"); return; }
+        console.log("Attaching Level 1 listeners inside setTimeout...");
+        triangleBtn.addEventListener('click', () => handleSymbolClick('triangle'));
+        squareBtn.addEventListener('click', () => handleSymbolClick('square'));
+        circleBtn.addEventListener('click', () => handleSymbolClick('circle'));
+    }, 0);
+}
+
+function handleSymbolClick(symbol) {
+    if (currentLevel !== 1) return;
+    console.log(`${symbol} clicked in Level 1`);
+
+    let colorToSet = '';
+    if (symbol === 'triangle') {
+        colorToSet = 'red';
+        lastSymbolClicked = 'triangle';
+        updateIndicator(colorToSet);
+    } else if (symbol === 'square') {
+        if (lastSymbolClicked === 'triangle') {
+            colorToSet = 'green';
+            lastSymbolClicked = null;
+            updateIndicator(colorToSet);
+        } else {
+            colorToSet = 'blue';
+            updateIndicator(colorToSet); // Update color FIRST
+            if (!level1Passed) {
+                level1Passed = true;
+                console.log("Level 1 Pass Condition Met (BLUE)!");
+                setTimeout(() => goToLevel(2), 500); // Go to next level
+            }
+            lastSymbolClicked = null;
+        }
+    } else if (symbol === 'circle') {
+        colorToSet = '';
+        lastSymbolClicked = null;
+        updateIndicator(colorToSet);
+    }
+}
+
+function updateIndicator(color) {
+    const indicatorEl = document.getElementById('indicator');
+    if (indicatorEl) {
+        indicatorEl.style.backgroundColor = color || '#ddd';
+        console.log(`Indicator color set to: ${color || 'default(#ddd)'}`);
+    }
+}
 
 // --- Level 2 Specific Functions ---
 function attachLevel2Listeners(target) { // Target is 12 letters
@@ -168,17 +215,20 @@ function handleLevel2Submit(target) { // Target is 12 letters
         if (!inputEl || !feedbackEl || !messageEl || !attemptsEl || !submitBtn || level2Attempts <= 0) { return; }
 
         let guess = inputEl.value.toUpperCase().trim();
-        messageEl.textContent = '';
+        // Clear message only if it's not the 'no attempts' message
+        if (level2Attempts > 0) messageEl.textContent = '';
+
 
         // ***** UZUNLUK KONTROLÜ (12 HARF) *****
         if (guess.length !== target.length) { // target.length is now 12
             messageEl.textContent = `Guess must be ${target.length} letters long.`; // Correctly says 12
             inputEl.focus();
-            return; // No attempt used for wrong length
+            return; // No attempt used
         }
 
+        // Use an attempt
         level2Attempts--;
-        saveLevel2Attempts(level2Attempts);
+        saveLevel2Attempts(level2Attempts); // Save remaining attempts
         if(attemptsEl) attemptsEl.textContent = level2Attempts;
 
         let feedback = '';
@@ -197,7 +247,7 @@ function handleLevel2Submit(target) { // Target is 12 letters
             messageEl.textContent = "Correct!";
             inputEl.disabled = true;
             submitBtn.disabled = true;
-            setTimeout(() => goToLevel(3), 1000);
+            setTimeout(() => goToLevel(3), 1000); // Win!
             return;
         }
 
@@ -205,7 +255,7 @@ function handleLevel2Submit(target) { // Target is 12 letters
             messageEl.textContent = "Incorrect. No attempts remaining!";
             inputEl.disabled = true;
             submitBtn.disabled = true;
-            if(feedbackEl) feedbackEl.textContent = '_ '.repeat(target.length).trim(); // Correctly resets 12
+            if(feedbackEl) feedbackEl.textContent = '_ '.repeat(target.length).trim(); // Reset feedback on final fail
             return;
         }
 
@@ -220,8 +270,29 @@ function handleLevel2Submit(target) { // Target is 12 letters
 }
 
 // --- Navigation & Reset ---
-function goToLevel(levelNumber) { /* ... önceki kod ... */ }
-function resetToLevel1() { /* ... önceki kod ... */ }
+function goToLevel(levelNumber) {
+    const passedLevel = levelNumber - 1;
+    // Using console.log instead of alert for smoother transition
+    console.log(`Congratulations! Level ${passedLevel} Passed! Moving to Level ${levelNumber}...`);
+    // alert(`Congratulations! Level ${passedLevel} Passed!\nMoving to Level ${levelNumber}...`);
+    currentLevel = levelNumber;
+    saveGame(currentLevel);
+    displayLevel(currentLevel);
+}
+
+function resetToLevel1() {
+    console.warn("Resetting progress to Level 1!");
+    try {
+        // Bypassing confirm for simplicity now
+        localStorage.removeItem(LEVEL_STORAGE_KEY);
+        localStorage.removeItem(L2_ATTEMPTS_STORAGE_KEY);
+        // alert("Progress reset. Reloading page...");
+        window.location.reload();
+    } catch(e) {
+        console.error("Error resetting progress:", e);
+        alert("Error resetting progress: " + e.message); // Keep alert for reset error
+    }
+}
 
 // --- Initial Load ---
 document.addEventListener('DOMContentLoaded', loadGame);
