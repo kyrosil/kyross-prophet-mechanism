@@ -34,3 +34,42 @@ h1 {
     color: #aaa; /* Soluk gri yazı */
     font-style: italic;
 }
+/* ----- NEW STYLES START ----- */
+
+#mechanism-symbols {
+    margin-bottom: 20px; /* Sembollerle gösterge arası boşluk */
+    display: flex;
+    justify-content: center; /* Sembolleri ortala */
+    gap: 15px; /* Semboller arası boşluk */
+}
+
+#mechanism-symbols button {
+    font-size: 2em; /* Sembolleri büyüt */
+    padding: 10px 20px;
+    cursor: pointer;
+    border: 2px solid #555;
+    background-color: #eee;
+    min-width: 60px; /* Düğme genişliği */
+    text-align: center;
+}
+
+#mechanism-symbols button:hover {
+    background-color: #ddd;
+}
+
+#indicator {
+    width: 100px;
+    height: 100px;
+    border: 2px solid #333;
+    background-color: #ddd; /* Başlangıçta nötr renk */
+    margin: 20px auto; /* Göstergeyi ortala */
+    transition: background-color 0.3s ease; /* Renk geçişini yumuşat */
+}
+
+#mechanism p { /* Alttaki açıklama yazısı için stil */
+    margin-top: 20px;
+    font-size: 0.9em;
+    color: #666;
+}
+
+/* ----- NEW STYLES END ----- */
