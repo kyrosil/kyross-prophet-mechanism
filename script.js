@@ -1,40 +1,34 @@
-// Kyros's Prophet Mechanism - Final Script (Reverted to Stable L1 Base + L2 Fixes)
+// Kyros's Prophet Mechanism - Final Script (Added Discount Code Details)
 
 // --- Global Variables ---
 let currentLevel = 1;
 let level1Passed = false;
 let lastSymbolClicked = null;
-let level2QuestionNumber = 1; // Changed from level2Attempts
+let level2QuestionNumber = 1;
 
 // --- LocalStorage Keys ---
 const LEVEL_STORAGE_KEY = 'kyrosMechanismLevel';
-const L2_QUESTION_STORAGE_KEY = 'kyrosMechanismL2Question'; // Changed from L2_ATTEMPTS_STORAGE_KEY
+const L2_QUESTION_STORAGE_KEY = 'kyrosMechanismL2Question';
 
 // --- DOM References ---
 let mechanismDiv;
 
+// --- Discount Codes ---
+const SWISS_CODE = "KYROSILEU20";
+const THY_CODE = "MERHABAKYROSILEU";
+
 // --- Core Functions ---
 
 function saveGame(level) {
-    try {
-        localStorage.setItem(LEVEL_STORAGE_KEY, level);
-        console.log(`Game saved at level: ${level}`);
-        if (level === 2) {
-            saveLevel2QuestionNumber(level2QuestionNumber); // Save L2 Q state
-        } else {
-            localStorage.removeItem(L2_QUESTION_STORAGE_KEY); // Clear L2 Q state if not on L2
-        }
+    try { localStorage.setItem(LEVEL_STORAGE_KEY, level); console.log(`Game saved at level: ${level}`);
+        if (level === 2) { saveLevel2QuestionNumber(level2QuestionNumber); }
+        else { localStorage.removeItem(L2_QUESTION_STORAGE_KEY); }
     } catch (e) { console.error("Could not save game level!", e); }
 }
 
-// Save L2 current question number
 function saveLevel2QuestionNumber(qNum) {
-     try {
-        const currentSavedLevel = parseInt(localStorage.getItem(LEVEL_STORAGE_KEY) || '1', 10);
-        if (currentSavedLevel === 2) {
-            localStorage.setItem(L2_QUESTION_STORAGE_KEY, qNum);
-            console.log(`Level 2 Question number saved: ${qNum}`);
-        }
+     try { const currentSavedLevel = parseInt(localStorage.getItem(LEVEL_STORAGE_KEY) || '1', 10);
+        if (currentSavedLevel === 2) { localStorage.setItem(L2_QUESTION_STORAGE_KEY, qNum); console.log(`Level 2 Question number saved: ${qNum}`); }
      } catch (e) { console.error("Could not save L2 question number", e); }
 }
 
@@ -46,25 +40,23 @@ function loadGame() {
         console.log(savedLevel ? `Game loaded at level: ${currentLevel}` : "No saved game found.");
         level1Passed = (currentLevel > 1);
         lastSymbolClicked = null;
-        // Load L2 question number only if starting on L2
         level2QuestionNumber = (currentLevel === 2) ? loadLevel2QuestionNumber() : 1;
         displayLevel(currentLevel);
     } catch (e) { console.error("Could not load game state!", e); currentLevel = 1; level2QuestionNumber = 1; displayLevel(currentLevel); }
 }
 
-// Load L2 current question number
 function loadLevel2QuestionNumber() {
      console.log("loadLevel2QuestionNumber called");
      try {
         const savedLevel = parseInt(localStorage.getItem(LEVEL_STORAGE_KEY) || '1', 10);
-        if (savedLevel !== 2) { console.log("Not Level 2, returning Q1."); return 1; }
+        if (savedLevel !== 2) return 1;
         const savedQNum = localStorage.getItem(L2_QUESTION_STORAGE_KEY);
-        if (savedQNum === null) { console.log("No saved L2 question, returning Q1."); return 1; }
-        const qNum = parseInt(savedQNum, 10);
-        console.log(`Loaded L2 question number: ${qNum}`);
-        return (isNaN(qNum) || qNum < 1 || qNum > 3) ? 1 : qNum; // Validate
+        if (savedQNum === null) return 1;
+        const qNum = parseInt(savedQNum, 10); console.log(`Loaded L2 question number: ${qNum}`);
+        return (isNaN(qNum) || qNum < 1 || qNum > 3) ? 1 : qNum;
      } catch (e) { console.error("Could not load L2 question number", e); return 1; }
 }
+
 
 function displayLevel(levelNumber) {
     console.log(`Displaying Level ${levelNumber}`);
@@ -79,7 +71,7 @@ function displayLevel(levelNumber) {
         let resetButtonHTML = (levelNumber > 1) ? `<p style="margin-top: 30px;"><button onclick="resetToLevel1()">Reset Progress to Level 1</button></p>` : '';
 
         if (levelNumber === 1) {
-            // --- Display Level 1 (Known Stable Code) ---
+            // --- Display Level 1 ---
             console.log("Setting up Level 1 HTML...");
             mechanismDiv.innerHTML = `
                 <div id="mechanism-symbols">
@@ -90,18 +82,16 @@ function displayLevel(levelNumber) {
                 <div id="indicator"></div>
                 <p>Level 1: Discover the primary functions.</p>
             `;
-            attachLevel1Listeners();
-            updateIndicator('');
-
+            attachLevel1Listeners(); updateIndicator('');
         } else if (levelNumber === 2) {
-            // --- Display Level 2 (3-Question Logic, Reset on Fail) ---
+            // --- Display Level 2 ---
             console.log("Setting up Level 2 HTML...");
-            level2QuestionNumber = loadLevel2QuestionNumber(); // Load current question state
+            level2QuestionNumber = loadLevel2QuestionNumber();
             let questionText = "";
             if (level2QuestionNumber === 1) { questionText = "Q1: Who is the main sponsor of Kyrosil?"; }
             else if (level2QuestionNumber === 2) { questionText = "Q2: Who is the latest sponsor of Kyrosil?"; }
-            else if (level2QuestionNumber === 3) { questionText = "Q3: What airline alliance do these two sponsors (Swiss Air & Turkish Airlines) belong to?"; }
-            else { questionText = "Error: Invalid question state."; level2QuestionNumber = 1; saveLevel2QuestionNumber(1); }
+            else if (level2QuestionNumber === 3) { questionText = "Q3: What airline alliance do these two sponsors (Swiss Air & THY) belong to?"; }
+            else { questionText = "Error loading question. Please Reset."; level2QuestionNumber = 1; saveLevel2QuestionNumber(1); }
 
             mechanismDiv.innerHTML = `
                 <h2>Level 2: Knowledge Check (${level2QuestionNumber}/3)</h2>
@@ -111,145 +101,139 @@ function displayLevel(levelNumber) {
                 <p id="level2-message" style="min-height: 1.2em; color: #d9534f; font-weight: bold;"></p>
                 ${resetButtonHTML}
             `;
-            attachLevel2AnswerListeners(); // Attach listeners
+            attachLevel2AnswerListeners();
+        } else { // Level 3 or higher is Reward Screen
+             // --- Display Reward Screen ---
+            console.log(`Displaying Reward Screen (Level ${levelNumber}).`);
+             if(mainTitle) mainTitle.textContent = `Kyros's Prophet Mechanism - Reward`;
 
-        } else {
-             // --- Placeholder for Level 3 and beyond ---
-             console.log(`Displaying placeholder for Level ${levelNumber}.`);
-             mechanismDiv.innerHTML = `<p>Level ${levelNumber} - Coming Soon!</p>${resetButtonHTML}`;
+             mechanismDiv.innerHTML = `
+                <h2>Congratulations! Levels Completed!</h2>
+                <p class="reward-instructions" style="color:red; font-weight:bold;">
+                    KESİNLİKLE havayolu şirketine kayıtlı E-POSTA ADRESİNİZİ ilgili alana girin. <br>
+                    İndirim kodunuz bu e-posta ile eşleştirilecektir! (En az birini doldurmanız zorunludur.)
+                </p>
+                <div style="margin-top: 15px;">
+                    <label for="swiss-email" style="display: block; margin-bottom: 2px;">Swiss Air'e kayıtlı mail:</label>
+                    <input type="email" id="swiss-email" placeholder="swiss_email@example.com" style="margin-bottom: 10px; width: 80%; max-width: 300px; padding: 5px;"><br>
+
+                    <label for="thy-email" style="display: block; margin-bottom: 2px;">Turkish Airlines/Miles&Smiles kayıtlı mail:</label>
+                    <input type="email" id="thy-email" placeholder="thy_email@example.com" style="width: 80%; max-width: 300px; padding: 5px;">
+                </div>
+                <button id="get-code-button" style="margin-top: 20px; padding: 10px 20px; font-size: 1.1em;">Get My Discount Code(s)</button>
+                <div id="discount-code-area" style="margin-top: 20px; font-weight: bold; font-size: 1.1em; display: none; border: 1px solid green; padding: 15px; background-color: #e9f5e9; line-height: 1.6;">
+                    </div>
+                ${resetButtonHTML}
+             `;
+             attachRewardScreenListeners();
         }
-        console.log(`displayLevel for Level ${levelNumber} finished.`);
-    } catch(error) { console.error("Error during displayLevel:", error); if(mechanismDiv) mechanismDiv.innerHTML = `<p style="color:red;">Error loading level! Try resetting.</p>${resetButtonHTML || ''}`; }
+    } catch(error) { console.error("Error during displayLevel:", error); if(mechanismDiv) mechanismDiv.innerHTML = `<p style="color:red;">Error loading content! Try resetting.</p>${resetButtonHTML || ''}`; }
 }
 
-// --- Level 1 Specific Functions (Stable Version) ---
-function attachLevel1Listeners() {
+// --- Level 1 Specific Functions ---
+function attachLevel1Listeners() { /* ... Önceki kod ... */ }
+function handleSymbolClick(symbol) { /* ... Önceki kod ... */ }
+function updateIndicator(color) { /* ... Önceki kod ... */ }
+
+// --- Level 2 Specific Functions ---
+function attachLevel2AnswerListeners() { /* ... Önceki kod ... */ }
+function handleLevel2AnswerSubmit() { /* ... Önceki kod ... */ }
+
+// --- Reward Screen Functions ---
+function attachRewardScreenListeners() {
     setTimeout(() => {
         try {
-            const triangleBtn = document.getElementById('symbol-triangle');
-            const squareBtn = document.getElementById('symbol-square');
-            const circleBtn = document.getElementById('symbol-circle');
-            if (!triangleBtn || !squareBtn || !circleBtn) { console.error("Could not find L1 buttons!"); return; }
-            console.log("Attaching L1 listeners...");
-            triangleBtn.addEventListener('click', () => handleSymbolClick('triangle'));
-            squareBtn.addEventListener('click', () => handleSymbolClick('square'));
-            circleBtn.addEventListener('click', () => handleSymbolClick('circle'));
-        } catch (error) { console.error("Error attaching L1 listeners:", error); }
+            const getCodeBtn = document.getElementById('get-code-button');
+            if (!getCodeBtn) { console.error("Reward Listener Error!"); return; }
+            console.log("Attaching Reward Screen listeners...");
+            getCodeBtn.addEventListener('click', handleGetCodeClick);
+        } catch(error) { console.error("Error attaching reward listeners", error); }
     }, 0);
 }
 
-function handleSymbolClick(symbol) {
-    if (currentLevel !== 1) return;
-    console.log(`${symbol} clicked in Level 1`);
+function handleGetCodeClick() {
+    console.log("handleGetCodeClick called");
     try {
-        let colorToSet = '';
-        if (symbol === 'triangle') {
-            colorToSet = 'red'; lastSymbolClicked = 'triangle'; updateIndicator(colorToSet);
-        } else if (symbol === 'square') {
-            if (lastSymbolClicked === 'triangle') {
-                colorToSet = 'green'; lastSymbolClicked = null; updateIndicator(colorToSet);
-            } else {
-                colorToSet = 'blue'; updateIndicator(colorToSet);
-                if (!level1Passed) {
-                    level1Passed = true; console.log("Level 1 Pass Condition Met (BLUE)!");
-                    setTimeout(() => goToLevel(2), 500);
-                    return;
-                }
-                lastSymbolClicked = null;
-            }
-        } else if (symbol === 'circle') {
-            colorToSet = ''; lastSymbolClicked = null; updateIndicator(colorToSet);
+        const swissInput = document.getElementById('swiss-email');
+        const thyInput = document.getElementById('thy-email');
+        const codeArea = document.getElementById('discount-code-area');
+        const messageEl = document.getElementById('level2-message') || {}; // Use dummy object if messageEl not on this screen
+        const getCodeBtn = document.getElementById('get-code-button');
+
+        if (!swissInput || !thyInput || !codeArea || !getCodeBtn) { console.error("Reward Error: Missing elements."); return; }
+
+        const swissEmail = swissInput.value.trim();
+        const thyEmail = thyInput.value.trim();
+
+        // Validation: At least one must be filled
+        if (swissEmail === '' && thyEmail === '') {
+            // Use codeArea to display error here instead of messageEl? Or add a specific message area? Let's use codeArea.
+            codeArea.innerHTML = `<p style="color:red;">Please enter your email in at least one field to get the code.</p>`;
+            codeArea.style.display = 'block'; // Make sure error is visible
+            return;
         }
-    } catch (error) { console.error("Error in handleSymbolClick:", error); }
-}
 
-function updateIndicator(color) {
-    try {
-        const indicatorEl = document.getElementById('indicator');
-        if (indicatorEl) { indicatorEl.style.backgroundColor = color || '#ddd'; console.log(`Indicator color set to: ${color || 'default(#ddd)'}`); }
-    } catch (error) { console.error("Error updating indicator:", error); }
-}
+        // Prepare codes and details to display
+        let codeOutput = '<h3>Your Discount Code(s):</h3>';
+        let addedCode = false;
 
-// --- Level 2 Specific Functions (3-Question Logic, Reset on Fail, Button Fix) ---
-function attachLevel2AnswerListeners() {
-    setTimeout(() => { // Keep setTimeout fix
-        try {
-            const inputEl = document.getElementById('level2-answer-input');
-            const submitBtn = document.getElementById('level2-answer-submit');
-            if (!inputEl || !submitBtn) { console.error("L2 Listener Error: Input or Submit button not found!"); return; }
-            console.log("Attaching L2 Answer listeners...");
-            // Clone node removed, relying on setTimeout
-            submitBtn.addEventListener('click', handleLevel2AnswerSubmit);
-            inputEl.addEventListener('keypress', (e) => { if (e.key === 'Enter' && !submitBtn.disabled) { handleLevel2AnswerSubmit(); } });
-        } catch(error) { console.error("Error attaching L2 listeners", error); }
-    }, 0);
-}
+        if (swissEmail !== '') {
+            codeOutput += `<p>Swiss Air Discount (%20): <strong style="color:blue; font-size: 1.2em;">${SWISS_CODE}</strong></p>`;
+            addedCode = true;
+        }
+        if (thyEmail !== '') {
+            if (addedCode) codeOutput += '<br>'; // Add space if both shown
+            codeOutput += `<p>Turkish Airlines Discount (%25): <strong style="color:red; font-size: 1.2em;">${THY_CODE}</strong></p>`;
+            addedCode = true;
+        }
 
-function handleLevel2AnswerSubmit() {
-    console.log("handleLevel2AnswerSubmit called");
-    try {
-        const inputEl = document.getElementById('level2-answer-input');
-        const messageEl = document.getElementById('level2-message');
-        const submitBtn = document.getElementById('level2-answer-submit');
-
-        if (!inputEl || !messageEl || !submitBtn || submitBtn.disabled) { return; }
-
-        let answer = inputEl.value.trim().toUpperCase();
-        messageEl.textContent = '';
-        if (!answer) { messageEl.textContent = "Please enter an answer."; return; }
-
-        let correctAnswers = [];
-        let currentQ = level2QuestionNumber;
-
-        // ***** CORRECTED ANSWER ORDER *****
-        if (currentQ === 1) { // Ana Sponsor -> THY etc.
-            correctAnswers = ["THY", "TÜRK HAVA YOLLARI", "TK", "TURKISH AIRLINES"];
-        } else if (currentQ === 2) { // Son Sponsor -> Swiss etc.
-            correctAnswers = ["SWISS AIR", "SWISSAIR"];
-        } else if (currentQ === 3) { // İttifak -> Star Alliance
-            correctAnswers = ["STAR ALLIANCE"];
-        } else { console.error("Invalid question number:", currentQ); return; }
-        // ***** END CORRECTION *****
-
-        submitBtn.disabled = true; inputEl.disabled = true; // Disable during processing
-
-        if (correctAnswers.includes(answer)) {
-            // CORRECT
-            console.log(`Correct answer for Q${currentQ}`);
-            level2QuestionNumber++; saveLevel2QuestionNumber(level2QuestionNumber);
-            if (level2QuestionNumber > 3) { // Passed Level 2
-                messageEl.textContent = "Correct! Level 2 completed!"; setTimeout(() => goToLevel(3), 1500);
-            } else { // Go to next question
-                messageEl.textContent = `Correct! Moving to question ${level2QuestionNumber}...`; setTimeout(() => displayLevel(2), 1500);
-            }
+        // ***** ADD FINE PRINT DETAILS *****
+        if(addedCode){
+            codeOutput += `<hr style="margin: 15px 0; border-top: 1px dashed #ccc;">`;
+            codeOutput += `<p style="font-size: 0.9em; color: #555;">`;
+            codeOutput += `<strong>Details & Conditions:</strong><br>`;
+            codeOutput += `- Business Class included.<br>`;
+            codeOutput += `- Discount applies to base fare (excludes taxes and fees).<br>`;
+            codeOutput += `- Valid until: <strong>April 30, 2025</strong>.`;
+            codeOutput += `</p>`;
         } else {
-            // INCORRECT - Reset to Q1
-            console.log(`Incorrect answer for Q${currentQ}. Resetting to Q1.`);
-            level2QuestionNumber = 1; saveLevel2QuestionNumber(level2QuestionNumber);
-            messageEl.textContent = "Incorrect! Returning to the first question...";
-            setTimeout(() => displayLevel(2), 2000); // Reload L2 display (shows Q1)
+             // Should not be reachable due to validation, but fallback
+             codeOutput = "<p>No code to display based on input.</p>";
         }
+        // ***** DETAILS ADDED *****
 
-    } catch(error) {
-        console.error("Error during handleLevel2AnswerSubmit:", error);
-        if(messageEl) messageEl.textContent = "Error processing answer.";
-        // Ensure controls are re-enabled on error
-        const submitBtn = document.getElementById('level2-answer-submit'); const inputEl = document.getElementById('level2-answer-input');
-        if(submitBtn) submitBtn.disabled = false; if(inputEl) inputEl.disabled = false;
+        // Display the code(s) and details
+        codeArea.innerHTML = codeOutput;
+        codeArea.style.display = 'block';
+
+        // Disable inputs and button after revealing code
+        swissInput.disabled = true;
+        thyInput.disabled = true;
+        getCodeBtn.disabled = true;
+        getCodeBtn.textContent = "Code(s) Revealed!";
+
+        console.log("Discount code(s) and details displayed.");
+
+    } catch (error) {
+        console.error("Error in handleGetCodeClick:", error);
+        if(codeArea) { // Try showing error in code area
+             codeArea.innerHTML = `<p style="color:red;">Error retrieving code: ${error.message}</p>`;
+             codeArea.style.display = 'block';
+        }
     }
 }
+
 
 // --- Navigation & Reset ---
 function goToLevel(levelNumber) {
     const passedLevel = levelNumber - 1;
-    alert(`Congratulations! Level ${passedLevel} Passed!\nMoving to Level ${levelNumber}...`); // Restored alert
-    currentLevel = levelNumber;
-    // If moving TO level 2 (from 1), reset its internal state
-    if (levelNumber === 2) {
-        level2QuestionNumber = 1;
-        saveLevel2QuestionNumber(1); // Ensure L2 starts at Q1
+    if (levelNumber < 3) { // Only alert for passing L1
+        alert(`Congratulations! Level ${passedLevel} Passed!\nMoving to Level ${levelNumber}...`);
+    } else { // Transitioning to reward screen (L3)
+         console.log(`Congratulations! Level ${passedLevel} Passed! Moving to Reward Screen (Level ${levelNumber})...`);
     }
-    saveGame(currentLevel); // Save the main level number
+    currentLevel = levelNumber;
+    saveGame(currentLevel);
     displayLevel(currentLevel);
 }
 
