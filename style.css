@@ -1,19 +1,20 @@
 /* Google Fonts Import (Poppins Weights) */
 @import url('https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap');
 
-/* Genel sayfa stilleri ve Renk Paleti Tanımları */
+/* Renk Paleti ve Temel Ayarlar */
 :root {
-    --background-color: #f4f8fa; /* Daha soft bir arka plan */
+    --background-color: #f8f9fa;
     --card-background: #ffffff;
-    --text-primary: #2d3748; /* Koyu gri/mavi */
-    --text-secondary: #718096; /* Orta gri */
-    --accent-blue: #3182ce; /* Ana Mavi */
+    --text-primary: #2d3748;
+    --text-secondary: #718096;
+    --accent-blue: #3182ce;
     --accent-blue-dark: #2b6cb0;
-    --accent-green: #38a169; /* Ana Yeşil */
+    --accent-green: #38a169;
     --accent-green-dark: #2f855a;
-    --accent-red: #e53e3e; /* Ana Kırmızı */
-    --border-color: #e2e8f0; /* Açık sınır rengi */
-    --shadow-color: rgba(0, 0, 0, 0.1);
+    --accent-red: #e53e3e;
+    --border-color: #e2e8f0;
+    --shadow-color-light: rgba(0, 0, 0, 0.05);
+    --shadow-color-medium: rgba(0, 0, 0, 0.1);
     --input-bg: #fdfdfe;
     --l1-red: #f56565;
     --l1-green: #48bb78;
@@ -26,89 +27,116 @@ body {
     background-color: var(--background-color);
     color: var(--text-primary);
     margin: 0;
-    padding: 25px; /* Biraz daha fazla padding */
+    padding: 25px;
     display: flex;
     flex-direction: column;
     align-items: center;
     min-height: 100vh;
     box-sizing: border-box;
-    line-height: 1.65; /* Daha okunaklı */
+    line-height: 1.65;
+
+    /* ----- TEKRAR EDEN ARKA PLAN ----- */
+    background-image: url('cropped-adsiz_tasarim-removebg-preview-1.webp'); /* Kyrosil Logosu */
+    background-repeat: repeat; /* Tekrarla */
+    background-size: 80px auto; /* Tekrar boyutunu ayarla (küçük) */
+    background-attachment: fixed; /* Kaydırma sırasında sabit kalsın */
+    /* Arka planı daha soluk yapmak için (isteğe bağlı): */
+    /* background-blend-mode: overlay; */ /* veya multiply, screen deneyebiliriz */
+    /* Ya da pseudo element ile opacity: */
 }
+/* Arka planı soluk yapmak için alternatif (body::before üzerine) */
+body::before {
+    content: "";
+    position: fixed; top: 0; left: 0; right: 0; bottom: 0;
+    background-image: url('cropped-adsiz_tasarim-removebg-preview-1.webp');
+    background-repeat: repeat;
+    background-size: 80px auto;
+    opacity: 0.04; /* Çok soluk yap */
+    z-index: -1; /* İçeriğin arkasına gönder */
+    pointer-events: none; /* Üzerindeki tıklamaları engelleme */
+}
+
 
 /* Ana Kapsayıcılar (Ortak Stil) */
 #start-screen,
 #mechanism {
     background-color: var(--card-background);
-    border-radius: 16px; /* Daha belirgin yuvarlak */
-    box-shadow: 0 10px 30px var(--shadow-color); /* Daha yumuşak gölge */
-    padding: 40px 50px; /* Daha fazla iç boşluk */
+    border-radius: 16px;
+    box-shadow: 0 8px 25px var(--shadow-color-medium); /* Gölge güncellendi */
+    padding: 40px 50px;
     width: 95%;
-    max-width: 720px; /* Biraz daha geniş */
+    max-width: 720px;
     box-sizing: border-box;
-    margin-top: 30px; /* Daha fazla üst boşluk */
+    margin-top: 30px;
     text-align: center;
     border: 1px solid var(--border-color);
+    /* ----- Giriş Animasyonu ----- */
+    opacity: 0; /* Başlangıçta görünmez */
+    transform: translateY(20px); /* Başlangıçta aşağıda */
+    animation: fadeInUp 0.6s ease-out forwards; /* Animasyon uygula */
+    animation-delay: 0.2s; /* Hafif gecikme */
 }
+/* Başlangıç Ekranı başta görünür (JS ayarlar ama CSS de desteklesin) */
+#start-screen { display: flex; flex-direction: column; align-items: center; opacity: 1; transform: translateY(0); animation: none; /* Başlangıçta animasyonsuz */ }
+/* Mekanizma gizli (JS ayarlar) */
+#mechanism { display: none; }
 
-/* Başlangıç Ekranı Stilleri */
-#start-screen { display: flex; flex-direction: column; align-items: center; } /* JS kontrol ediyor */
+
+/* Başlangıç Ekranı Özel Stilleri */
 #start-screen h2 { color: var(--text-primary); margin-bottom: 30px; font-weight: 600; font-size: 2em; }
-#start-screen #main-logo { max-width: 170px; height: auto; margin-bottom: 35px; border-radius: 50%; box-shadow: 0 4px 15px rgba(0,0,0,0.1); } /* Logo için gölge */
+#start-screen #main-logo { max-width: 170px; height: auto; margin-bottom: 35px; border-radius: 50%; box-shadow: 0 5px 20px rgba(0,0,0,0.12); transition: transform 0.3s ease; }
+#start-screen #main-logo:hover { transform: scale(1.05); } /* Logo üzerine gelince hafif büyüme */
 #start-screen .intro-text { margin-bottom: 35px; font-size: 1.1em; color: var(--text-secondary); }
-#start-screen .intro-text em { display: block; font-size: 0.9em; opacity: 0.9; margin-top: 10px; color: #a0aec0; } /* Daha açık gri */
+#start-screen .intro-text em { display: block; font-size: 0.9em; opacity: 0.9; margin-top: 10px; color: #a0aec0; }
 #start-screen .sponsor-logos { display: flex; justify-content: center; align-items: center; gap: 35px; margin-bottom: 40px; flex-wrap: wrap; border-top: 1px solid var(--border-color); padding-top: 30px; width: 100%; }
-#start-screen .sponsor-logos img { max-height: 50px; max-width: 120px; height: auto; width: auto; filter: grayscale(0%); /* Renkli */ opacity: 0.9; transition: opacity 0.3s ease, transform 0.3s ease; }
-#start-screen .sponsor-logos img:hover { opacity: 1; transform: scale(1.08); } /* Büyüme efekti */
+#start-screen .sponsor-logos img { max-height: 50px; max-width: 120px; height: auto; width: auto; opacity: 0.9; transition: opacity 0.3s ease, transform 0.3s ease; }
+#start-screen .sponsor-logos img:hover { opacity: 1; transform: scale(1.1); }
 
-/* Keyframes for button pulse */
-@keyframes pulse {
-    0% { transform: scale(1); box-shadow: 0 4px 10px rgba(49, 130, 206, 0.3); }
-    50% { transform: scale(1.03); box-shadow: 0 6px 15px rgba(49, 130, 206, 0.4); }
-    100% { transform: scale(1); box-shadow: 0 4px 10px rgba(49, 130, 206, 0.3); }
-}
+/* Start Game Buton Animasyonu */
+@keyframes pulse { 0%, 100% { transform: scale(1); box-shadow: 0 4px 15px rgba(49, 130, 206, 0.2); } 50% { transform: scale(1.04); box-shadow: 0 7px 20px rgba(49, 130, 206, 0.3); } }
 
 #start-game-button {
-    padding: 15px 35px; font-size: 1.2em; cursor: pointer; background-color: var(--accent-blue); color: white; border: none; border-radius: 8px; transition: background-color 0.2s ease, transform 0.1s ease, box-shadow 0.2s ease; font-weight: 600; /* Daha kalın */ white-space: normal; max-width: 300px; box-shadow: 0 4px 10px rgba(49, 130, 206, 0.3);
-    animation: pulse 2.5s infinite ease-in-out; /* Eklenen animasyon */
+    padding: 15px 35px; font-size: 1.2em; cursor: pointer; background-color: var(--accent-blue); color: white; border: none; border-radius: 8px; transition: background-color 0.2s ease, transform 0.15s ease, box-shadow 0.2s ease; font-weight: 600; white-space: normal; max-width: 300px; box-shadow: 0 4px 15px rgba(49, 130, 206, 0.2);
+    animation: pulse 2.8s infinite ease-in-out; /* Daha yavaş animasyon */
 }
-#start-game-button:hover { background-color: var(--accent-blue-dark); transform: translateY(-2px); box-shadow: 0 6px 12px rgba(49, 130, 206, 0.4); animation-play-state: paused; /* Hoverda dur */ }
+#start-game-button:hover { background-color: var(--accent-blue-dark); transform: translateY(-3px); /* Daha fazla kalkma */ box-shadow: 0 7px 18px rgba(49, 130, 206, 0.35); animation-play-state: paused; }
 #start-game-button:active { transform: scale(0.97); box-shadow: none; animation-play-state: paused; }
+
 
 /* Ana Oyun Alanı */
 #main-title { display: none; color: var(--text-primary); text-align: center; margin-top: 40px; margin-bottom: 20px; font-weight: 700; font-size: 2.2em; }
-#mechanism { display: none; }
 
 /* ---- Seviye 1 Stilleri ---- */
 #mechanism h2 { margin-top: 0; margin-bottom: 25px; color: var(--text-primary); font-weight: 600; font-size: 1.7em; }
 #mechanism-symbols { margin-top: 20px; margin-bottom: 30px; padding: 10px 0; text-align: center; }
 #mechanism-symbols button {
-    font-size: 2.4em; padding: 18px 28px; cursor: pointer; border: none; background: linear-gradient(145deg, #ffffff, #e6eef2); /* Gradient */ color: var(--text-secondary); border-radius: 12px; /* Daha yuvarlak */ min-width: 80px; text-align: center; transition: background 0.2s, transform 0.1s, box-shadow 0.2s; margin: 10px; box-shadow: 4px 4px 8px #d1d9e6, -4px -4px 8px #ffffff; /* Neumorphism benzeri */ position: relative; z-index: 10; display: inline-block;
+    font-size: 2.4em; padding: 18px 28px; cursor: pointer; border: none; background: var(--card-background); color: var(--text-secondary); border-radius: 12px; min-width: 80px; text-align: center; transition: background 0.2s, transform 0.15s, box-shadow 0.2s; margin: 10px; box-shadow: 5px 5px 10px #d1d9e6, -5px -5px 10px #ffffff; /* Daha belirgin neumorphism */ position: relative; z-index: 10; display: inline-block;
 }
-#mechanism-symbols button:hover { background: #e6eef2; }
-#mechanism-symbols button:active { transform: scale(0.96); box-shadow: inset 2px 2px 5px #d1d9e6, inset -2px -2px 5px #ffffff; }
-#indicator { width: 120px; height: 120px; border: 5px solid var(--card-background); /* İç border */ background-color: var(--l1-default); margin: 20px auto 30px auto; transition: background-color 0.5s cubic-bezier(0.25, 0.8, 0.25, 1); border-radius: 50%; /* Tam daire */ box-shadow: 0 5px 15px rgba(0,0,0,0.1), inset 0 3px 6px rgba(0,0,0,0.1); } /* Daha belirgin */
-/* Indicator Renkleri */
-#indicator[style*="background-color: red;"] { background-color: var(--l1-red); box-shadow: 0 0 15px var(--l1-red); }
-#indicator[style*="background-color: green;"] { background-color: var(--l1-green); box-shadow: 0 0 15px var(--l1-green); }
-#indicator[style*="background-color: blue;"] { background-color: var(--l1-blue); box-shadow: 0 0 15px var(--l1-blue); }
+#mechanism-symbols button:hover { transform: translateY(-2px); box-shadow: 7px 7px 14px #d1d9e6, -7px -7px 14px #ffffff; }
+#mechanism-symbols button:active { transform: scale(0.96); box-shadow: inset 3px 3px 7px #d1d9e6, inset -3px -3px 7px #ffffff; }
+#indicator { width: 120px; height: 120px; border: 6px solid var(--card-background); /* Daha kalın iç border */ background-color: var(--l1-default); margin: 20px auto 30px auto; transition: background-color 0.5s cubic-bezier(0.25, 0.8, 0.25, 1), box-shadow 0.5s ease; /* Gölge geçişi eklendi */ border-radius: 50%; box-shadow: 0 6px 20px rgba(0,0,0,0.12), inset 0 4px 8px rgba(0,0,0,0.1); }
+/* Indicator Renk ve Gölge Efektleri */
+#indicator[style*="background-color: red;"] { background-color: var(--l1-red); box-shadow: 0 0 20px 0px rgba(245, 101, 101, 0.7); } /* Renk ve Glow */
+#indicator[style*="background-color: green;"] { background-color: var(--l1-green); box-shadow: 0 0 20px 0px rgba(72, 187, 120, 0.7); }
+#indicator[style*="background-color: blue;"] { background-color: var(--l1-blue); box-shadow: 0 0 20px 0px rgba(66, 153, 225, 0.7); }
 
 #mechanism > p { margin-top: 20px; font-size: 1em; color: var(--text-secondary); }
 
 /* ---- Seviye 2 ve Ödül Stilleri ---- */
 .level2-instructions, .reward-instructions { font-size: 1.1em; margin-bottom: 20px; color: var(--text-primary); line-height: 1.6; }
-.reward-instructions strong { color: var(--accent-red); font-weight: 600; } /* Uyarı */
+.reward-instructions strong { color: var(--accent-red); font-weight: 600; }
 .reward-instructions span { font-size:0.9em; opacity:0.9; color: var(--text-secondary); }
-.available-letters { font-size: 0.95em; color: var(--text-secondary); margin-bottom: 25px; font-family: 'Courier New', monospace; letter-spacing: 2px; background-color: var(--background-color); padding: 10px 15px; border-radius: 6px; border: 1px solid var(--border-color); display: inline-block; }
-#level2-feedback { font-family: 'Courier New', Courier, monospace; font-size: 1.7em; letter-spacing: 6px; /* Daha aralıklı */ margin-bottom: 25px; padding: 15px 18px; border: 1px dashed #a0aec0; /* Daha belirgin dashed */ background-color: var(--background-color); min-height: 50px; display: inline-block; border-radius: 8px; color: var(--text-primary); word-break: break-all; }
-#level2-answer-input { font-size: 1.1em; font-family: 'Poppins', sans-serif; padding: 12px 15px; margin-right: 10px; margin-bottom: 10px; width: calc(100% - 170px); /* Submit butonu için yer */ max-width: 400px; border: 1px solid #ced4da; border-radius: 6px; box-sizing: border-box; transition: border-color 0.2s, box-shadow 0.2s; vertical-align: middle; }
+.available-letters { font-size: 0.95em; color: var(--text-secondary); margin-bottom: 25px; font-family: 'Courier New', monospace; letter-spacing: 2px; background-color: #f1f3f5; padding: 10px 15px; border-radius: 6px; border: 1px solid var(--border-color); display: inline-block; }
+#level2-feedback { font-family: 'Courier New', Courier, monospace; font-size: 1.7em; letter-spacing: 6px; margin-bottom: 25px; padding: 15px 18px; border: 1px dashed #a0aec0; background-color: #f1f3f5; min-height: 50px; display: inline-block; border-radius: 8px; color: var(--text-primary); word-break: break-all; }
+#level2-answer-input { font-size: 1.1em; font-family: 'Poppins', sans-serif; padding: 12px 15px; margin-right: 10px; margin-bottom: 10px; width: calc(100% - 170px); max-width: 400px; /* Biraz daha geniş */ border: 1px solid #ced4da; border-radius: 6px; box-sizing: border-box; transition: border-color 0.2s, box-shadow 0.2s; vertical-align: middle; }
 #level2-answer-input:focus { border-color: var(--accent-blue); outline: 0; box-shadow: 0 0 0 0.2rem rgba(49, 130, 206, 0.25); }
 #level2-answer-submit { font-size: 1.05em; padding: 13px 20px; cursor: pointer; background-color: var(--accent-blue); color: white; border: none; border-radius: 6px; transition: background-color 0.2s, transform 0.1s; vertical-align: middle; font-weight: 500; }
-#level2-answer-submit:hover { background-color: var(--accent-blue-dark); transform: translateY(-1px); }
+#level2-answer-submit:hover { background-color: var(--accent-blue-dark); transform: translateY(-2px); }
 #level2-answer-submit:active { transform: scale(0.98); }
-#level2-message, #reward-message { margin-top: 18px; min-height: 1.3em; font-weight: 500; /* Kalın değil */ color: var(--accent-red); font-size: 1em; } /* Mesajlar */
-#discount-code-area { margin-top: 25px; text-align: left; font-weight: normal; font-size: 1em; display: none; border: 1px solid var(--accent-green); padding: 25px 30px; background-color: #f0fff4; /* Açık yeşilimsi */ line-height: 1.8; border-radius: 10px; animation: fadeIn 0.5s ease-out; } /* Fade-in animasyonu */
-#discount-code-area h3 { margin-top: 0; margin-bottom: 15px; color: var(--accent-green-dark); font-weight: 600; border-bottom: 1px solid #9ae6b4; padding-bottom: 10px; font-size: 1.3em; }
-#discount-code-area p { margin: 10px 0; font-size: 1em; }
+#level2-message, #reward-message { margin-top: 18px; min-height: 1.3em; font-weight: 500; color: var(--accent-red); font-size: 1em; transition: opacity 0.3s ease; }
+#discount-code-area { margin-top: 25px; text-align: left; font-weight: normal; font-size: 1em; display: none; /* JS ile açılacak */ border: 1px solid var(--accent-green); padding: 25px 30px; background-color: #f0fff4; line-height: 1.8; border-radius: 10px; animation: fadeIn 0.5s 0.2s ease-out forwards; opacity: 0; /* Animasyon için başlangıç */ }
+#discount-code-area h3 { margin-top: 0; margin-bottom: 15px; color: var(--accent-green-dark); font-weight: 600; border-bottom: 1px solid #b8e0bb; padding-bottom: 10px; font-size: 1.3em; }
+#discount-code-area p { margin: 10px 0; font-size: 1.05em; }
 #discount-code-area hr { margin: 20px 0; border: none; border-top: 1px dashed #c6f6d5; }
 #discount-code-area strong { font-weight: 600; }
 #discount-code-area .code { display: inline-block; padding: 4px 9px; background-color: #fff; border-radius: 4px; font-size: 1.25em; font-family: monospace; margin-left: 5px; box-shadow: 0 2px 4px rgba(0,0,0,0.1); border: 1px solid var(--border-color); }
@@ -117,60 +145,35 @@ body {
 label[for="swiss-email"], label[for="thy-email"] { display: block; margin-bottom: 5px; text-align: left; font-weight: 500; color: #4a5568; font-size: 1em; }
 #swiss-email, #thy-email { margin-bottom: 15px; width: 100%; padding: 10px; font-size: 1em; box-sizing: border-box; border: 1px solid #cbd5e0; border-radius: 6px; }
 #swiss-email:focus, #thy-email:focus { border-color: var(--accent-blue); outline: 0; box-shadow: 0 0 0 0.2rem rgba(49, 130, 206, 0.25); }
-#get-code-button { margin-top: 25px; padding: 14px 30px; font-size: 1.1em; line-height: 1.4; white-space: normal; max-width: 320px; cursor: pointer; background-color: var(--accent-green); color: white; border: none; border-radius: 8px; transition: background-color 0.2s, transform 0.1s ease, box-shadow 0.2s ease; font-weight: 600; box-shadow: 0 4px 10px rgba(56, 161, 105, 0.3); }
-#get-code-button:hover { background-color: var(--accent-green-dark); transform: translateY(-2px); box-shadow: 0 6px 12px rgba(56, 161, 105, 0.4); }
-#get-code-button:active { transform: scale(0.98); box-shadow: none; }
+#get-code-button { margin-top: 25px; padding: 14px 30px; font-size: 1.1em; line-height: 1.4; white-space: normal; max-width: 320px; cursor: pointer; background-color: var(--accent-green); color: white; border: none; border-radius: 8px; transition: background-color 0.2s, transform 0.15s ease, box-shadow 0.2s ease; font-weight: 600; box-shadow: 0 4px 12px rgba(56, 161, 105, 0.3); }
+#get-code-button:hover { background-color: var(--accent-green-dark); transform: translateY(-3px); box-shadow: 0 7px 16px rgba(56, 161, 105, 0.35); }
+#get-code-button:active { transform: scale(0.97); box-shadow: none; }
 
 /* Disabled state styles */
 #level2-answer-input:disabled, #level2-answer-submit:disabled,
-#swiss-email:disabled, #thy-email:disabled, #get-code-button:disabled { background-color: #f7fafc; border-color: #e2e8f0; color: #a0aec0; cursor: not-allowed; opacity: 0.8; box-shadow: none; }
+#swiss-email:disabled, #thy-email:disabled, #get-code-button:disabled { background-color: #e9ecef; border-color: var(--border-color); color: #adb5bd; cursor: not-allowed; opacity: 0.8; box-shadow: none; }
 
-/* Keyframe for fadeIn animation */
-@keyframes fadeIn { from { opacity: 0; transform: translateY(10px); } to { opacity: 1; transform: translateY(0); } }
+/* Keyframe Animasyonları */
+@keyframes pulse { 0%, 100% { transform: scale(1); box-shadow: 0 4px 15px rgba(49, 130, 206, 0.2); } 50% { transform: scale(1.04); box-shadow: 0 7px 20px rgba(49, 130, 206, 0.3); } } /* Start butonu için */
+@keyframes fadeInUp { from { opacity: 0; transform: translateY(20px); } to { opacity: 1; transform: translateY(0); } } /* Genel giriş animasyonu */
+@keyframes fadeIn { from { opacity: 0; } to { opacity: 1; } } /* Daha basit fade */
 
-/* Responsive Styles (Mobil için) */
+
+/* Responsive Styles (Mobil için - Önceki gibi, gerekirse ayarlanabilir) */
 @media (max-width: 600px) {
     body { padding: 15px; }
-    #start-screen, #mechanism { padding: 25px 20px; } /* Consistent padding */
-    #start-screen h2 { font-size: 1.5em; }
-    #start-screen #main-logo { max-width: 120px; }
-    #start-screen .intro-text { font-size: 1em; }
-    #start-screen .sponsor-logos { gap: 20px; padding-top: 20px; }
-    #start-screen .sponsor-logos img { max-height: 35px; }
-    #start-game-button { padding: 12px 25px; font-size: 1.1em; max-width: 250px; }
-
-    #main-title { font-size: 1.6em; margin-top: 25px; }
+    #start-screen, #mechanism { padding: 25px 20px; margin-top: 15px; }
+    #start-screen h2 { font-size: 1.5em; } #start-screen #main-logo { max-width: 120px; } #start-screen .intro-text { font-size: 1em; } #start-screen .sponsor-logos { gap: 20px; } #start-screen .sponsor-logos img { max-height: 35px; } #start-game-button { font-size: 1.1em; padding: 12px 25px; }
+    #main-title { font-size: 1.8em; margin-top: 25px; }
     #mechanism h2 { font-size: 1.4em; }
     #mechanism-symbols button { font-size: 1.9em; padding: 10px 18px; margin: 5px; min-width: 60px; }
     #indicator { width: 90px; height: 90px; margin-bottom: 20px; }
     #mechanism > p { font-size: 0.95em;}
-
     .level2-instructions, .reward-instructions { font-size: 1em; }
-    .available-letters { font-size: 0.9em; padding: 8px 12px; }
-    #level2-feedback { font-size: 1.4em; letter-spacing: 4px; padding: 10px; margin-bottom: 20px;}
-    #level2-answer-input { width: calc(100% - 130px); font-size: 1em; padding: 10px; } /* Adjust width */
-    #level2-answer-submit { font-size: 1em; padding: 11px 16px; }
-    #level2-message, #reward-message { font-size: 0.9em; }
-
-    label[for="swiss-email"], label[for="thy-email"] { font-size: 0.9em; }
-    #swiss-email, #thy-email { font-size: 1em; padding: 10px; }
-    #get-code-button { font-size: 1em; padding: 12px 20px; max-width: 90%;}
-    #discount-code-area { padding: 15px 20px; font-size: 0.9em; }
-    #discount-code-area h3 { font-size: 1.1em; }
-    #discount-code-area .code { font-size: 1.1em; }
+    .available-letters { font-size: 0.9em; } #level2-feedback { font-size: 1.4em; }
+    #level2-answer-input { width: calc(100% - 130px); } #level2-answer-submit { font-size: 1em; padding: 12px 18px; }
+    #level2-message, #reward-message { font-size: 0.95em; }
+    label[for="swiss-email"], label[for="thy-email"] { font-size: 0.95em; } #swiss-email, #thy-email { font-size: 1em; }
+    #get-code-button { font-size: 1em; padding: 12px 20px; }
+    #discount-code-area { padding: 15px 20px; font-size: 0.95em; } #discount-code-area h3 { font-size: 1.15em; } #discount-code-area .code { font-size: 1.15em; }
 }
-/* ----- YENİ EKLENEN İPUCU STİLİ ----- */
-
-#mechanism > p:first-of-type::after {
-    /* Seviye 1'deki ilk paragrafın sonrasına ekler */
-    content: "\A\A İpucu: Sembollere tek tek veya farklı sıralarla basmayı deneyin.\A (Hint: Try pressing the symbols individually or in different sequences.)"; /* \A ile satır atlatıldı */
-    display: block; /* Yeni satırda göstermek için */
-    margin-top: 15px; /* Üstteki metinle arasına boşluk */
-    font-size: 0.9em;  /* Biraz daha küçük font */
-    color: #6c757d;    /* Soluk renk */
-    font-style: italic; /* İtalik stil */
-    white-space: pre-wrap; /* Kod içindeki satır atlamalarını uygula */
-    line-height: 1.5; /* Satır yüksekliği */
-}
-
-/* ----- İPUCU STİLİ SONU ----- */
