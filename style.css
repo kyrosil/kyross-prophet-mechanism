@@ -45,7 +45,7 @@ body {
     background: var(--gradient-bg);
     color: var(--text-primary);
     margin: 0;
-    padding: 30px;
+    padding: 20px;
     display: flex;
     flex-direction: column;
     align-items: center;
@@ -55,6 +55,7 @@ body {
     position: relative;
     overflow-x: hidden;
     transition: background 0.3s ease;
+    -webkit-tap-highlight-color: transparent; /* Mobil cihazlarda tıklama vurgusunu kaldır */
 }
 
 /* Partikül Canvas */
@@ -78,7 +79,7 @@ body::before {
     bottom: 0;
     background-image: url('cropped-adsiz_tasarim-removebg-preview-1.webp');
     background-repeat: repeat;
-    background-size: 100px auto;
+    background-size: 80px auto;
     opacity: 0.05;
     z-index: -1;
     pointer-events: none;
@@ -88,29 +89,30 @@ body::before {
 /* Arka Plan Animasyonu */
 @keyframes subtleMove {
     0% { background-position: 0 0; }
-    100% { background-position: 100px 100px; }
+    100% { background-position: 80px 80px; }
 }
 
 /* Karanlık Mod Toggle */
 #theme-toggle {
     position: fixed;
-    top: 20px;
-    right: 20px;
-    padding: 10px 15px;
+    top: 15px;
+    right: 15px;
+    padding: 8px 12px;
     background: var(--accent-blue);
     color: white;
     border: none;
     border-radius: 50px;
     cursor: pointer;
-    font-size: 0.9em;
+    font-size: 0.85em;
     font-weight: 500;
     box-shadow: 0 4px 15px var(--glow-blue);
-    transition: all 0.3s ease;
+    transition: all 0.2s ease;
+    z-index: 1000;
 }
 
-#theme-toggle:hover {
+#theme-toggle:active {
     background: var(--accent-blue-dark);
-    transform: translateY(-2px);
+    transform: scale(0.95);
     box-shadow: 0 6px 20px var(--glow-blue);
 }
 
@@ -120,10 +122,10 @@ body::before {
     background: var(--card-background);
     border-radius: 20px;
     box-shadow: 0 10px 30px var(--shadow-color-medium);
-    padding: 50px;
-    width: 95%;
+    padding: 40px;
+    width: 100%;
     max-width: 800px;
-    margin-top: 40px;
+    margin-top: 60px;
     text-align: center;
     border: 1px solid var(--border-color);
     position: relative;
@@ -144,7 +146,7 @@ body::before {
 
 /* Seviye Geçiş Animasyonu */
 .level-transition {
-    animation: levelFadeOut 0.5s ease forwards;
+    animation: levelFadeOut 0.4s ease forwards;
 }
 
 @keyframes levelFadeOut {
@@ -160,38 +162,40 @@ body::before {
 /* Başlangıç Ekranı */
 #start-screen h2 {
     color: var(--text-primary);
-    margin-bottom: 30px;
+    margin-bottom: 25px;
     font-weight: 700;
-    font-size: 2.5em;
+    font-size: 2.2em;
     text-shadow: 0 2px 4px var(--shadow-color-light);
+    word-break: break-word;
 }
 
 #start-screen #main-logo {
-    max-width: 200px;
+    max-width: 180px;
     height: auto;
-    margin-bottom: 40px;
+    margin-bottom: 30px;
     border-radius: 50%;
     box-shadow: 0 8px 25px var(--shadow-color-medium);
     transition: transform 0.4s ease, box-shadow 0.4s ease;
 }
 
-#start-screen #main-logo:hover {
+#start-screen #main-logo:active {
     transform: scale(1.1) rotate(5deg);
     box-shadow: 0 12px 30px var(--glow-blue);
 }
 
 #start-screen .intro-text {
-    margin-bottom: 40px;
-    font-size: 1.2em;
+    margin-bottom: 30px;
+    font-size: 1.1em;
     color: var(--text-secondary);
-    max-width: 600px;
+    max-width: 90%;
+    overflow-wrap: break-word;
 }
 
 #start-screen .intro-text em {
     display: block;
-    font-size: 0.95em;
+    font-size: 0.9em;
     opacity: 0.8;
-    margin-top: 15px;
+    margin-top: 10px;
     color: var(--text-secondary);
 }
 
@@ -199,51 +203,50 @@ body::before {
     display: flex;
     justify-content: center;
     align-items: center;
-    gap: 40px;
-    margin-bottom: 50px;
+    gap: 30px;
+    margin-bottom: 40px;
     flex-wrap: wrap;
     border-top: 1px solid var(--border-color);
-    padding-top: 35px;
+    padding-top: 25px;
     width: 100%;
 }
 
 #start-screen .sponsor-logos img {
-    max-height: 60px;
-    max-width: 140px;
+    max-height: 50px;
+    max-width: 120px;
     height: auto;
     width: auto;
     opacity: 0.85;
-    transition: all 0.4s ease;
-    filter: grayscale(20%);
+    transition: all 0.3s ease;
 }
 
-#start-screen .sponsor-logos img:hover {
+#start-screen .sponsor-logos img:active {
     opacity: 1;
     transform: scale(1.15) translateY(-5px);
-    filter: grayscale(0);
     box-shadow: 0 5px 15px var(--glow-blue);
 }
 
 /* Start Game Buton */
 @keyframes neonPulse {
-    0%, 100% { box-shadow: 0 0 10px var(--glow-blue), 0 0 20px var(--glow-blue); }
-    50% { box-shadow: 0 0 20px var(--glow-blue), 0 0 30px var(--glow-blue); }
+    0%, 100% { box-shadow: 0 0 8px var(--glow-blue), 0 0 15px var(--glow-blue); }
+    50% { box-shadow: 0 0 15px var(--glow-blue), 0 0 25px var(--glow-blue); }
 }
 
 #start-game-button {
-    padding: 18px 40px;
-    font-size: 1.3em;
+    padding: 15px 35px;
+    font-size: 1.2em;
     cursor: pointer;
     background: var(--accent-blue);
     color: white;
     border: none;
     border-radius: 50px;
     font-weight: 600;
-    box-shadow: 0 0 10px var(--glow-blue);
+    box-shadow: 0 0 8px var(--glow-blue);
     animation: neonPulse 2s infinite ease-in-out;
-    transition: all 0.3s ease;
+    transition: all 0.2s ease;
     position: relative;
     overflow: hidden;
+    min-width: 200px;
 }
 
 #start-game-button::after {
@@ -256,24 +259,19 @@ body::before {
     background: rgba(255, 255, 255, 0.3);
     border-radius: 50%;
     transform: translate(-50%, -50%);
-    transition: width 0.4s ease, height 0.4s ease;
+    transition: width 0.3s ease, height 0.3s ease;
 }
 
 #start-game-button:active::after {
-    width: 200px;
-    height: 200px;
-}
-
-#start-game-button:hover {
-    background: var(--accent-blue-dark);
-    transform: translateY(-5px) scale(1.05);
-    box-shadow: 0 0 20px var(--glow-blue);
-    animation-play-state: paused;
+    width: 180px;
+    height: 180px;
 }
 
 #start-game-button:active {
+    background: var(--accent-blue-dark);
     transform: scale(0.95);
-    box-shadow: none;
+    box-shadow: 0 0 15px var(--glow-blue);
+    animation-play-state: paused;
 }
 
 /* Ana Oyun Alanı */
@@ -281,42 +279,46 @@ body::before {
     display: none;
     color: var(--text-primary);
     text-align: center;
-    margin-top: 50px;
-    margin-bottom: 30px;
+    margin-top: 40px;
+    margin-bottom: 25px;
     font-weight: 800;
-    font-size: 2.8em;
+    font-size: 2.5em;
     text-shadow: 0 3px 6px var(--shadow-color-light);
+    word-break: break-word;
 }
 
 /* Seviye 1 */
 #mechanism h2 {
     margin-top: 0;
-    margin-bottom: 30px;
+    margin-bottom: 25px;
     color: var(--text-primary);
     font-weight: 700;
-    font-size: 2em;
+    font-size: 1.8em;
+    word-break: break-word;
 }
 
 #mechanism-symbols {
-    margin: 30px 0;
-    padding: 15px 0;
+    margin: 25px 0;
+    padding: 10px 0;
     text-align: center;
+    display: flex;
+    justify-content: center;
+    gap: 15px;
+    flex-wrap: wrap;
 }
 
 #mechanism-symbols button {
-    font-size: 2.6em;
-    padding: 20px 30px;
+    font-size: 2.4em;
+    padding: 15px 25px;
     cursor: pointer;
     border: none;
     background: var(--card-background);
     color: var(--text-primary);
-    border-radius: 15px;
-    min-width: 90px;
-    transition: all 0.3s ease;
-    margin: 12px;
-    box-shadow: 0 8px 20px var(--shadow-color-light);
+    border-radius: 12px;
+    min-width: 80px;
+    transition: all 0.2s ease;
+    box-shadow: 0 6px 15px var(--shadow-color-light);
     position: relative;
-    z-index: 10;
     overflow: hidden;
 }
 
@@ -330,53 +332,48 @@ body::before {
     background: rgba(255, 255, 255, 0.3);
     border-radius: 50%;
     transform: translate(-50%, -50%);
-    transition: width 0.4s ease, height 0.4s ease;
+    transition: width 0.3s ease, height 0.3s ease;
 }
 
 #mechanism-symbols button:active::after {
-    width: 150px;
-    height: 150px;
-}
-
-#mechanism-symbols button:hover {
-    transform: translateY(-5px) scale(1.05);
-    box-shadow: 0 12px 25px var(--glow-blue);
-    background: var(--accent-blue);
-    color: white;
+    width: 120px;
+    height: 120px;
 }
 
 #mechanism-symbols button:active {
     transform: scale(0.95);
-    box-shadow: none;
+    box-shadow: 0 8px 20px var(--glow-blue);
+    background: var(--accent-blue);
+    color: white;
 }
 
 #indicator {
-    width: 140px;
-    height: 140px;
-    border: 8px solid var(--card-background);
+    width: 120px;
+    height: 120px;
+    border: 6px solid var(--card-background);
     background-color: var(--l1-default);
-    margin: 30px auto;
+    margin: 25px auto;
     border-radius: 50%;
-    box-shadow: 0 10px 25px var(--shadow-color-medium), inset 0 5px 10px var(--shadow-color-light);
-    transition: all 0.5s ease;
+    box-shadow: 0 8px 20px var(--shadow-color-medium), inset 0 4px 8px var(--shadow-color-light);
+    transition: all 0.4s ease;
     animation: indicatorPulse 2s infinite ease-in-out;
 }
 
 #indicator[style*="background-color: red;"] {
     background-color: var(--l1-red);
-    box-shadow: 0 0 25px var(--glow-red);
+    box-shadow: 0 0 20px var(--glow-red);
     animation: none;
 }
 
 #indicator[style*="background-color: green;"] {
     background-color: var(--l1-green);
-    box-shadow: 0 0 25px var(--glow-green);
+    box-shadow: 0 0 20px var(--glow-green);
     animation: none;
 }
 
 #indicator[style*="background-color: blue;"] {
     background-color: var(--l1-blue);
-    box-shadow: 0 0 25px var(--glow-blue);
+    box-shadow: 0 0 20px var(--glow-blue);
     animation: none;
 }
 
@@ -386,17 +383,19 @@ body::before {
 }
 
 #mechanism > p {
-    margin-top: 25px;
-    font-size: 1.1em;
+    margin-top: 20px;
+    font-size: 1em;
     color: var(--text-secondary);
+    overflow-wrap: break-word;
 }
 
 /* Seviye 2 ve Ödül */
 .level2-instructions, .reward-instructions {
-    font-size: 1.2em;
-    margin-bottom: 25px;
+    font-size: 1.1em;
+    margin-bottom: 20px;
     color: var(--text-primary);
-    line-height: 1.7;
+    line-height: 1.6;
+    overflow-wrap: break-word;
 }
 
 .reward-instructions strong {
@@ -405,69 +404,71 @@ body::before {
 }
 
 .reward-instructions span {
-    font-size: 0.95em;
+    font-size: 0.9em;
     opacity: 0.85;
     color: var(--text-secondary);
 }
 
 .available-letters {
-    font-size: 1em;
+    font-size: 0.95em;
     color: var(--text-primary);
-    margin-bottom: 30px;
+    margin-bottom: 25px;
     font-family: 'Courier New', monospace;
-    letter-spacing: 3px;
+    letter-spacing: 2px;
     background: var(--input-bg);
-    padding: 12px 20px;
-    border-radius: 8px;
+    padding: 10px 15px;
+    border-radius: 6px;
     border: 1px solid var(--border-color);
-    box-shadow: 0 5px 15px var(--shadow-color-light);
+    box-shadow: 0 4px 10px var(--shadow-color-light);
 }
 
 #level2-feedback {
     font-family: 'Courier New', monospace;
-    font-size: 1.9em;
-    letter-spacing: 7px;
-    margin-bottom: 30px;
-    padding: 18px 20px;
+    font-size: 1.7em;
+    letter-spacing: 6px;
+    margin-bottom: 25px;
+    padding: 15px 18px;
     border: 1px dashed var(--border-color);
     background: var(--input-bg);
-    min-height: 60px;
-    border-radius: 10px;
+    min-height: 50px;
+    border-radius: 8px;
     color: var(--text-primary);
-    box-shadow: 0 5px 15px var(--shadow-color-light);
+    box-shadow: 0 4px 10px var(--shadow-color-light);
+    word-break: break-all;
 }
 
 #level2-answer-input {
-    font-size: 1.2em;
-    padding: 15px 20px;
-    margin-right: 15px;
-    margin-bottom: 15px;
-    width: calc(100% - 180px);
-    max-width: 450px;
+    font-size: 1.1em;
+    padding: 12px 15px;
+    margin-right: 10px;
+    margin-bottom: 10px;
+    width: calc(100% - 170px);
+    max-width: 400px;
     border: 1px solid var(--border-color);
-    border-radius: 8px;
-    transition: all 0.3s ease;
+    border-radius: 6px;
+    transition: all 0.2s ease;
     background: var(--input-bg);
 }
 
 #level2-answer-input:focus {
     border-color: var(--accent-blue);
-    box-shadow: 0 0 10px var(--glow-blue);
+    box-shadow: 0 0 8px var(--glow-blue);
 }
 
 #level2-answer-submit {
-    font-size: 1.1em;
-    padding: 15px 25px;
+    font-size: 1.05em;
+    padding: 12px 20px;
     cursor: pointer;
     background: var(--accent-blue);
     color: white;
     border: none;
-    border-radius: 8px;
+    border-radius: 6px;
     font-weight: 600;
-    transition: all 0.3s ease;
-    box-shadow: 0 5px 15px var(--glow-blue);
+    transition: all 0.2s ease;
+    box-shadow: 0 4px 10px var(--glow-blue);
     position: relative;
     overflow: hidden;
+    min-width: 120px;
 }
 
 #level2-answer-submit::after {
@@ -480,87 +481,85 @@ body::before {
     background: rgba(255, 255, 255, 0.3);
     border-radius: 50%;
     transform: translate(-50%, -50%);
-    transition: width 0.4s ease, height 0.4s ease;
+    transition: width 0.3s ease, height 0.3s ease;
 }
 
 #level2-answer-submit:active::after {
-    width: 150px;
-    height: 150px;
-}
-
-#level2-answer-submit:hover {
-    background: var(--accent-blue-dark);
-    transform: translateY(-3px);
-    box-shadow: 0 8px 20px var(--glow-blue);
+    width: 120px;
+    height: 120px;
 }
 
 #level2-answer-submit:active {
+    background: var(--accent-blue-dark);
     transform: scale(0.95);
+    box-shadow: 0 6px 15px var(--glow-blue);
 }
 
 #level2-message, #reward-message {
-    margin-top: 20px;
-    min-height: 1.5em;
+    margin-top: 15px;
+    min-height: 1.3em;
     font-weight: 600;
     color: var(--accent-red);
-    font-size: 1.1em;
+    font-size: 1em;
+    overflow-wrap: break-word;
 }
 
 #discount-code-area {
-    margin-top: 30px;
+    margin-top: 25px;
     text-align: left;
-    font-size: 1.1em;
+    font-size: 1em;
     border: 1px solid var(--accent-green);
-    padding: 30px;
+    padding: 25px;
     background: var(--input-bg);
-    line-height: 1.9;
-    border-radius: 12px;
-    animation: fadeIn 0.6s ease-out forwards;
-    box-shadow: 0 8px 20px var(--glow-green);
+    line-height: 1.8;
+    border-radius: 10px;
+    animation: fadeIn 0.5s ease-out forwards;
+    box-shadow: 0 6px 15px var(--glow-green);
 }
 
 #discount-code-area h3 {
-    margin: 0 0 20px;
+    margin: 0 0 15px;
     color: var(--accent-green-dark);
     font-weight: 700;
-    font-size: 1.5em;
+    font-size: 1.3em;
 }
 
 #discount-code-area p {
-    margin: 15px 0;
-    font-size: 1.1em;
+    margin: 10px 0;
+    font-size: 1em;
 }
 
 #discount-code-area hr {
-    margin: 25px 0;
+    margin: 20px 0;
     border: none;
     border-top: 1px dashed var(--border-color);
 }
 
 #discount-code-area .code {
-    padding: 6px 12px;
+    padding: 5px 10px;
     background: var(--card-background);
-    border-radius: 6px;
-    font-size: 1.3em;
+    border-radius: 5px;
+    font-size: 1.2em;
     font-family: monospace;
-    margin-left: 8px;
-    box-shadow: 0 3px 8px var(--shadow-color-light);
+    margin-left: 5px;
+    box-shadow: 0 2px 6px var(--shadow-color-light);
 }
 
 #get-code-button {
-    margin-top: 30px;
-    padding: 16px 35px;
-    font-size: 1.2em;
+    margin-top: 25px;
+    padding: 14px 30px;
+    font-size: 1.1em;
     cursor: pointer;
     background: var(--accent-green);
     color: white;
     border: none;
     border-radius: 50px;
     font-weight: 600;
-    box-shadow: 0 0 10px var(--glow-green);
-    transition: all 0.3s ease;
+    box-shadow: 0 0 8px var(--glow-green);
+    transition: all 0.2s ease;
     position: relative;
     overflow: hidden;
+    min-width: 200px;
 }
 
 #get-code-button::after {
@@ -573,22 +572,18 @@ body::before {
     background: rgba(255, 255, 255, 0.3);
     border-radius: 50%;
     transform: translate(-50%, -50%);
-    transition: width 0.4s ease, height 0.4s ease;
+    transition: width 0.3s ease, height 0.3s ease;
 }
 
 #get-code-button:active::after {
-    width: 200px;
-    height: 200px;
-}
-
-#get-code-button:hover {
-    background: var(--accent-green-dark);
-    transform: translateY(-5px);
-    box-shadow: 0 0 20px var(--glow-green);
+    width: 180px;
+    height: 180px;
 }
 
 #get-code-button:active {
+    background: var(--accent-green-dark);
     transform: scale(0.95);
+    box-shadow: 0 0 15px var(--glow-green);
 }
 
 /* Disabled Stilleri */
@@ -603,7 +598,7 @@ body::before {
 
 /* Keyframe Animasyonları */
 @keyframes fadeInUp {
-    from { opacity: 0; transform: translateY(30px); }
+    from { opacity: 0; transform: translateY(20px); }
     to { opacity: 1; transform: translateY(0); }
 }
 
@@ -613,45 +608,210 @@ body::before {
 }
 
 @keyframes neonPulse {
-    0%, 100% { box-shadow: 0 0 10px var(--glow-blue), 0 0 20px var(--glow-blue); }
-    50% { box-shadow: 0 0 20px var(--glow-blue), 0 0 30px var(--glow-blue); }
+    0%, 100% { box-shadow: 0 0 8px var(--glow-blue), 0 0 15px var(--glow-blue); }
+    50% { box-shadow: 0 0 15px var(--glow-blue), 0 0 25px var(--glow-blue); }
 }
 
 /* Responsive Stiller */
 @media (max-width: 600px) {
-    body { padding: 20px; }
-    #start-screen, #mechanism { padding: 30px; margin-top: 20px; }
-    #start-screen h2 { font-size: 2em; }
-    #start-screen #main-logo { max-width: 150px; }
-    #start-screen .intro-text { font-size: 1.1em; }
-    #start-screen .sponsor-logos { gap: 25px; }
-    #start-screen .sponsor-logos img { max-height: 50px; }
-    #start-game-button { font-size: 1.2em; padding: 15px 30px; }
-    #main-title { font-size: 2.2em; margin-top: 30px; }
-    #mechanism h2 { font-size: 1.6em; }
-    #mechanism-symbols button { font-size: 2.2em; padding: 15px 25px; min-width: 70px; }
-    #indicator { width: 100px; height: 100px; }
-    #mechanism > p { font-size: 1em; }
-    .level2-instructions, .reward-instructions { font-size: 1.1em; }
-    .available-letters { font-size: 0.95em; }
-    #level2-feedback { font-size: 1.6em; }
-    #level2-answer-input { width: calc(100% - 140px); }
-    #level2-answer-submit { font-size: 1em; padding: 12px 20px; }
-    #level2-message, #reward-message { font-size: 1em; }
-    #discount-code-area { padding: 20px; font-size: 1em; }
-    #discount-code-area h3 { font-size: 1.3em; }
-    #discount-code-area .code { font-size: 1.2em; }
-    #get-code-button { font-size: 1.1em; padding: 14px 25px; }
+    body {
+        padding: 15px;
+    }
+
+    #theme-toggle {
+        top: 10px;
+        right: 10px;
+        padding: 6px 10px;
+        font-size: 0.8em;
+    }
+
+    #start-screen, #mechanism {
+        padding: 20px;
+        margin-top: 50px;
+        border-radius: 15px;
+    }
+
+    #start-screen h2 {
+        font-size: 1.6em;
+    }
+
+    #start-screen #main-logo {
+        max-width: 120px;
+        margin-bottom: 20px;
+    }
+
+    #start-screen .intro-text {
+        font-size: 0.95em;
+        max-width: 95%;
+    }
+
+    #start-screen .sponsor-logos {
+        gap: 20px;
+        padding-top: 20px;
+    }
+
+    #start-screen .sponsor-logos img {
+        max-height: 40px;
+        max-width: 100px;
+    }
+
+    #start-game-button {
+        font-size: 1em;
+        padding: 12px 25px;
+        min-width: 180px;
+    }
+
+    #main-title {
+        font-size: 1.8em;
+        margin-top: 30px;
+        margin-bottom: 20px;
+    }
+
+    #mechanism h2 {
+        font-size: 1.4em;
+    }
+
+    #mechanism-symbols {
+        gap: 10px;
+    }
+
+    #mechanism-symbols button {
+        font-size: 2em;
+        padding: 12px 20px;
+        min-width: 70px;
+    }
+
+    #indicator {
+        width: 90px;
+        height: 90px;
+        margin: 20px auto;
+    }
+
+    #mechanism > p {
+        font-size: 0.9em;
+    }
+
+    .level2-instructions, .reward-instructions {
+        font-size: 0.95em;
+    }
+
+    .available-letters {
+        font-size: 0.85em;
+        padding: 8px 12px;
+    }
+
+    #level2-feedback {
+        font-size: 1.4em;
+        letter-spacing: 4px;
+        padding: 12px 15px;
+    }
+
+    #level2-answer-input {
+        font-size: 1em;
+        padding: 10px 12px;
+        width: calc(100% - 130px);
+        max-width: 300px;
+    }
+
+    #level2-answer-submit {
+        font-size: 0.95em;
+        padding: 10px 15px;
+        min-width: 100px;
+    }
+
+    #level2-message, #reward-message {
+        font-size: 0.9em;
+    }
+
+    #discount-code-area {
+        padding: 15px;
+        font-size: 0.9em;
+    }
+
+    #discount-code-area h3 {
+        font-size: 1.1em;
+    }
+
+    #discount-code-area .code {
+        font-size: 1.1em;
+    }
+
+    #get-code-button {
+        font-size: 1em;
+        padding: 12px 20px;
+        min-width: 180px;
+    }
+
+    label[for="swiss-email"], label[for="thy-email"] {
+        font-size: 0.9em;
+    }
+
+    #swiss-email, #thy-email {
+        font-size: 0.95em;
+        padding: 8px;
+    }
+}
+
+@media (max-width: 400px) {
+    #start-screen, #mechanism {
+        padding: 15px;
+    }
+
+    #start-screen h2 {
+        font-size: 1.4em;
+    }
+
+    #start-screen #main-logo {
+        max-width: 100px;
+    }
+
+    #start-screen .intro-text {
+        font-size: 0.9em;
+    }
+
+    #start-game-button {
+        font-size: 0.95em;
+        padding: 10px 20px;
+    }
+
+    #main-title {
+        font-size: 1.6em;
+    }
+
+    #mechanism h2 {
+        font-size: 1.2em;
+    }
+
+    #mechanism-symbols button {
+        font-size: 1.8em;
+        padding: 10px 15px;
+        min-width: 60px;
+    }
+
+    #indicator {
+        width: 80px;
+        height: 80px;
+    }
+
+    #level2-answer-input {
+        width: calc(100% - 110px);
+        max-width: 250px;
+    }
+
+    #level2-answer-submit {
+        padding: 8px 12px;
+    }
 }
 
 /* Seviye 1 İpucu */
 #mechanism > p:first-of-type::after {
     content: "\A\A İpucu: Sembollere tek tek veya farklı sıralarla basmayı deneyin.\A (Hint: Try pressing the symbols individually or in different sequences.)";
     display: block;
-    margin-top: 20px;
-    font-size: 0.95em;
+    margin-top: 15px;
+    font-size: 0.9em;
     color: var(--text-secondary);
     font-style: italic;
     white-space: pre-wrap;
-    line-height: 1.6;
+    line-height: 1.5;
+    overflow-wrap: break-word;
 }
