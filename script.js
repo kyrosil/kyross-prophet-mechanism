@@ -179,8 +179,8 @@ function displayLevel(levelNumber) {
                     questionTextTR = "Soru 1: Kyrosil'in ana sponsoru kimdir?";
                     questionTextEN = "Q1: Who is the main sponsor of Kyrosil?";
                 } else if (level2QuestionNumber === 2) {
-                    questionTextTR = "Soru 2: Kyrosil'in son sponsoru kimdir?";
-                    questionTextEN = "Q2: Who is the latest sponsor of Kyrosil?";
+                    questionTextTR = "Soru 2: Kyrosil'in diğer havayolu sponsor kimdir?";
+                    questionTextEN = "Q2: Who is the other airlines sponsor of Kyrosil?";
                 } else if (level2QuestionNumber === 3) {
                     questionTextTR = "Soru 3: Bu iki sponsorun (Swiss Air & Turkish Airlines) ortak bağlı olduğu havayolu ittifakı hangisidir?";
                     questionTextEN = "Q3: What airline alliance do these two sponsors (Swiss Air & Turkish Airlines) belong to?";
