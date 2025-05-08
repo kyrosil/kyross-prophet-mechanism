@@ -1,4 +1,4 @@
-// Kyros's Prophet Mechanism - Enhanced Version with Animations
+// Kyros's Prophet Mechanism - Enhanced Version with Animations and Mobile Optimization
 
 // --- Global Variables ---
 let currentLevel = 1;
@@ -12,8 +12,8 @@ let mainTitle;
 let startScreen;
 
 // --- Discount Codes ---
-const SWISS_CODE = "KYROSILEU20";
-const THY_CODE = "MERHABAKYROSILEU";
+const SWISS_CODE = "KYROSILSWISS20";
+const THY_CODE = "KYROSILEUC25";
 
 // --- Particle Effect ---
 function initParticles() {
@@ -24,13 +24,14 @@ function initParticles() {
     canvas.height = window.innerHeight;
 
     const particles = [];
-    const particleCount = 50;
+    const isMobile = window.innerWidth <= 600;
+    const particleCount = isMobile ? 30 : 50; // Mobil cihazlarda daha az partikül
 
     class Particle {
         constructor() {
             this.x = Math.random() * canvas.width;
             this.y = Math.random() * canvas.height;
-            this.size = Math.random() * 3 + 1;
+            this.size = Math.random() * (isMobile ? 2 : 3) + 1;
             this.speedX = Math.random() * 0.5 - 0.25;
             this.speedY = Math.random() * 0.5 - 0.25;
         }
@@ -99,7 +100,7 @@ document.addEventListener('DOMContentLoaded', () => {
             themeToggle.textContent = document.body.classList.contains('dark-mode') ? '☀️ Light Mode' : '🌙 Dark Mode';
         });
 
-        initParticles(); // Initialize particle effect
+        initParticles();
         console.log("Initial screen setup complete.");
     } catch (error) {
         console.error("Error during initial DOM setup:", error);
@@ -122,14 +123,14 @@ function startGame() {
             mainTitle.style.display = 'block';
             mechanismDiv.style.display = 'block';
             mechanismDiv.classList.add('level-transition');
-            setTimeout(() => mechanismDiv.classList.remove('level-transition'), 500);
+            setTimeout(() => mechanismDiv.classList.remove('level-transition'), 400);
 
             currentLevel = 1;
             level1Passed = false;
             lastSymbolClicked = null;
             level2QuestionNumber = 1;
             displayLevel(1);
-        }, 500);
+        }, 400);
     } catch (error) {
         console.error("Error in startGame function:", error);
         if (mechanismDiv) mechanismDiv.innerHTML = `<p style='color:red;'>Error starting game: ${error.message}</p>`;
@@ -218,7 +219,7 @@ function displayLevel(levelNumber) {
                 attachRewardScreenListeners();
             }
             console.log(`displayLevel for Level ${levelNumber} finished setup.`);
-        }, 500);
+        }, 400);
     } catch (error) {
         console.error("Error during displayLevel execution:", error);
         if (mechanismDiv) mechanismDiv.innerHTML = `<p style="color:red; font-weight:bold;">Error loading level content! Please try refreshing. Error: ${error.message}</p>`;
@@ -421,7 +422,7 @@ function handleGetCodeClick() {
             return;
         }
 
-        let codeOutput = '<h3>İ için Kod(lar)ınız / Your Discount Code(s):</h3>';
+        let codeOutput = '<h3>İndirim Kod(lar)ınız / Your Discount Code(s):</h3>';
         let addedCode = false;
         if (swissEmail !== '') {
             codeOutput += `<p>Swiss Air Discount (%20): <strong style="color:blue;" class="code">${SWISS_CODE}</strong></p>`;
@@ -435,7 +436,7 @@ function handleGetCodeClick() {
 
         if (addedCode) {
             codeOutput += `<hr>`;
-            codeOutput += `<p style="font-size: 0.9em; color: #555;"><strong>Detaylar & Koşullar / Details & Conditions:</strong><br>- Business Class dahildir / Business Class included.<br>- İndirim vergi ve harçlar hariç ana ücrete uygulanır / Discount applies to base fare (excludes taxes and fees).<br>- Son Geçerlilik Tarihi / Valid until: <strong>April 30, 2025</strong>.</p>`;
+            codeOutput += `<p style="font-size: 0.9em; color: #555;"><strong>Detaylar & Koşullar / Details & Conditions:</strong><br>- Business Class dahildir / Business Class included.<br>- İndirim vergi ve harçlar hariç ana ücrete uygulanır / Discount applies to base fare (excludes taxes and fees).<br>- Son Geçerlilik Tarihi / Valid until: <strong>May 31, 2025</strong>.</p>`;
         } else {
             codeOutput = "<p>No code to display.</p>";
         }
